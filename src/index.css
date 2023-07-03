@@ -1,15 +1,105 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  --h1 : 2.3rem;
+  --h2 : 2rem;
+  --h3 : 1.6rem;
+  --h4 : 1.4rem;
+  --p : 1.3rem;
+  --li : 1.2rem;
+  --btn : 1.4rem;
+  --bg1 : #FFC017;
+}
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+*{
+  margin : 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: rgb(41, 41, 41);
+}
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
+#root{
+  width: 100vw;
+  height: 100svh;
+  /* overflow: hidden; */
+  font-size: var(--h3);
+}
+
+p{
+  font-size: var(--p);
+  line-height: 1.2;
+}
+
+h1{
+  font-size: var(--h1);
+	font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.7px;
+  margin-bottom: 0.5em;
+  font-family: Arial, Helvetica, sans-serif;
+  text-transform: capitalize ;
+}
+h2{
+  font-size: var(--h2);
+  font-weight: 600;
+  font-family: fantasy;
+  margin-bottom : 0.2em;
+}
+h3{
+  font-size: var(--h3);
+  font-family: monospace;
+  margin-bottom: 0.1em;
+}
+h4{
+  font-size: var(--h4);
+  font-family: monospace;
+  margin-bottom: 0.1em;
+}
+li{
+  font-size: var(--li);
+}
+button{
+  font-size: var(--btn);
+  padding-inline : 0.7em;
+  padding-block: 0.2em;
+  border-radius: 0.5em;
+  font-weight: 600;
+  color : rgb(252, 232, 232);
+}
+
+button[data-btn='green']{
+  background-color: rgb(63, 213, 63);
+}
+button[data-btn='red']{
+  background-color: rgb(253, 50, 50);
+}
+
+.svg-img{
+  width: 35px;
+}
+
+@media screen and (min-width: 480px) {
+  :root{
+    --h1 : 3rem;
+    --h2 : 2.4rem;
+    --h3 : 2.2rem;
+    --h4 : 1.6rem;
+    --p : 1.6rem;
+    --li : 1.5rem;
+    --btn : 1.8rem;
+  }
+  .svg-img{
+    width: 60px;
+  }
+}
+
+@media screen and (min-width: 1025px) {
+  :root{
+    --h1 : 3rem;
+    --h2 : 2.8rem;
+    --h3 : 2.2rem;
+    --h4 : 1.8rem;
+    --p : 1.6rem;
+    --li : 1.5rem;
+    --button : 1.6rem;
+  }
+  
 }
