@@ -7,7 +7,9 @@
     gap : 1.5em;
     align-items: flex-start;
 }
-
+#home-intro > h1{
+    font-size : var(--xl);
+}
 #home-intro > img{
     display: none;
     /* border-radius: 0.4em; */
@@ -71,13 +73,13 @@
     margin-block : 0.5em;
 }
 .card-content > p{
-    color : rgb(128, 134, 140);
+    color : var(--text1);
     font-size: var(--li);
     line-height: -0.5;
 }
 
 .card-bar{
-    background-color: rgb(213, 220, 226);
+    background-color: var(--bg2);
     display: flex;
     padding-block: 0.2em;
     justify-content: space-evenly;
@@ -126,7 +128,6 @@
         justify-content: center;
         align-items: center;
         gap : 1em;
-        /* background-color: red; */
     }
     #home-postlist > h1{
         width: 100%;

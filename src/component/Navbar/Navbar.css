@@ -50,12 +50,12 @@ nav{
     /* background-color : red; */
 }
 
-nav > span{
-    font-weight: 600;
+nav > .navlink{
     width: 100%;
     display: flex;
     align-items: center;
     gap : 0.5em;
+    text-decoration: none;
 }
 
 nav > img{
@@ -74,10 +74,11 @@ nav > img{
 @media screen and ( min-width : 1025px ) {
     #nav-ham,
     #nav-close,
-    nav > span > .svg-img{
+    nav > .navlink > .svg-img{
         display: none;
     }
     header{
+        position: static;
         padding-inline : 2em;
         padding-block: 0.4em;
     }
@@ -94,7 +95,7 @@ nav > img{
         padding : 0em;
         gap : 1em;
     }
-    nav > span{
+    nav > .navlink{
         font-size: var(--h4);
         white-space: nowrap;
         font-weight: 400;
@@ -102,7 +103,7 @@ nav > img{
         transition: transform;
         transition-duration: 450ms;
     }
-    nav > span:hover{
+    nav > .navlink:hover{
         text-decoration: underline;
         transform: scale(1.1);
     }
