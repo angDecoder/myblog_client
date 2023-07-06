@@ -1,0 +1,56 @@
+#TextEditor{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1;
+    overflow: hidden;
+    /* background-color: red; */
+}
+
+#edit_toggle{
+    margin-block : 0.2em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-inline : 0.4em;
+    /* gap : 0.2em; */
+    /* background-color: red; */
+    width: 100%;
+}
+
+#edit_toggle > .navlink{
+    font-size: var(--p);
+    font-weight: bold;
+    flex-grow: 1;
+    /* background-color: blue; */
+    text-align: center;
+}
+
+#editor_title > input{
+    font-size: var(--p);
+}
+
+
+@media screen and ( min-width : 480px ) {
+    #edit_toggle{
+        padding-block: 0.5em;
+    }
+}
+
+@media screen and ( min-width : 1025px ) {
+
+    #TextEditor{
+        flex-direction: column-reverse;
+    }
+    #edit_toggle > span{
+        width: 100px;
+        /* padding : 0em; */
+        font-size: 1rem;
+    }
+    #edit_toggle{
+        width: 70vw;
+        padding : 0.1em;
+        align-self: center;
+        cursor: pointer;
+    }
+}

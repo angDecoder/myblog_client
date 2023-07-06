@@ -1,6 +1,6 @@
 :root {
   --xl: 2.7rem;
-  --h1: 2.3rem;
+  --h1: 2rem;
   --h2: 2rem;
   --h3: 1.8rem;
   --h4: 1.5rem;
@@ -8,8 +8,10 @@
   --li: 1.2rem;
   --btn: 1.3rem;
   --bg1: #FFC017;
-  --bg2 : rgb(213, 220, 226);
-  --text1 : rgb(128, 134, 140);
+  --bg2: rgb(213, 220, 226);
+  --bg3 : rgb(48, 62, 78);
+  --text1: rgb(128, 134, 140);
+  --link : rgb(14, 120, 250);;
 }
 
 * {
@@ -17,14 +19,6 @@
   padding: 0;
   box-sizing: border-box;
   color: rgb(41, 41, 41);
-}
-
-#root {
-  width: 100vw;
-  height: 100svh;
-  overflow-x: hidden;
-  font-size: var(--h3);
-  background-color: #e8e7e7;
 }
 
 p {
@@ -66,13 +60,15 @@ li {
 }
 
 button {
-  font-size: var(--btn);
   outline: none;
-  font-weight: 600;
-  padding-inline : 0.4em;
-  padding-block: 0.2em;
-  border-radius: 0.5em;
-  min-width: 150px;
+  font-size: var(--li);
+  /* margin-inline: 0.3em; */
+  padding: 0.3em;
+  border-radius: 0.4em;
+  text-align: center;
+  background-color: black;
+  color: whitesmoke;
+  min-width: 20vw;
 }
 
 button[data-btn='green'] {
@@ -82,15 +78,16 @@ button[data-btn='green'] {
 
 button[data-btn='red'] {
   background-color: rgb(253, 50, 50);
-  color : rgb(220, 219, 219);
+  color: rgb(220, 219, 219);
 }
 
 button[data-btn='black'] {
   background-color: rgb(29, 37, 44);
   color: rgb(210, 223, 236);
 }
+
 button[data-btn='blue'] {
-  background-color: rgb(14, 120, 250);
+  background-color: var(--link);
   color: rgb(210, 223, 236);
 }
 
@@ -101,20 +98,20 @@ button[data-btn='blue'] {
   padding: 0.1em;
 }
 
-.svg-img.checked{
+.svg-img.checked {
   stroke-width: 1px;
   fill: var(--fill);
 }
 
 @media screen and (min-width: 480px) {
   :root {
-    --xl : 3.4rem;
+    --xl: 3.4rem;
     --h1: 3rem;
     --h2: 2.6rem;
     --h3: 2em;
     --h4: 1.9rem;
     --p: 1.8rem;
-    --li: 1.7rem;
+    --li: 1.4rem;
     --btn: 1.7rem;
   }
 
@@ -125,27 +122,32 @@ button[data-btn='blue'] {
 
 @media screen and (min-width: 1025px) {
   :root {
-    --xl : 3rem;
+    --xl: 3rem;
     --h1: 2.8rem;
     --h2: 2.4rem;
     --h3: 2rem;
     --h4: 1.6rem;
     --p: 1.5rem;
-    --li: 1.5rem;
+    --li: 1.2rem;
     --btn: 1.4rem;
   }
-  .svg-img{
+
+  .svg-img {
     width: 40px;
   }
+
   .svg-img:hover {
     stroke: var(--stroke-hover);
     background-color: var(--stroke_bg-hover);
-    border : 2px solid var(--stroke-hover);
+    border: 2px solid var(--stroke-hover);
   }
 
   .svg-img {
     transition: background-color, stroke;
     transition-duration: 350ms;
     border-radius: 0.5em;
+  }
+  button{
+    min-width: 10vw;
   }
 }

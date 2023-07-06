@@ -23,8 +23,8 @@ function Register() {
         <button data-btn='blue' >Google</button>
         <button data-btn='black' >Github</button>
       </div>
-
       <p id='form-para'>Already Regisered? <NavLink to='/login'>Login Here</NavLink> </p>
+
     </div>
   )
 }

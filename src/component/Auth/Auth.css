@@ -1,5 +1,6 @@
 #Auth{
-    margin-block : 1.5em;
+    margin-block-start: 1em;
+    overflow-y: scroll;
     background-color: white;
     padding-block: 1.5em;
     padding-inline: 0.5em;
