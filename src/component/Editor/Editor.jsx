@@ -8,6 +8,7 @@ import Divider from '../../assets/Divider';
 import Code from '../../assets/Code';
 import Photo from '../../assets/Photo';
 import Link from '../../assets/Link';
+import controls from './controls';
 
 
 function Editor() {
@@ -25,19 +26,20 @@ function Editor() {
       let text = event.target.value.trim().toLowerCase();
       if (text !== '' && !tagList.includes(text) && tagList.length < 4)
         setTagList([...tagList, text]);
-      else 
+      else
         event.target.placeholder = 'No more tags';
 
       event.target.value = '';
     }
   }
 
-  const removeTag = (tag)=>{
-    const newTagList = tagList.filter(elem=>elem!==tag);  
+  const removeTag = (tag) => {
+    const newTagList = tagList.filter(elem => elem !== tag);
     setTagList(newTagList);
     const input = document.querySelector('#editor_title > input');
     input.placeholder = 'Add upto 4 tags ...';
   }
+
 
   // adding event listener
   useEffect(() => {
@@ -57,14 +59,14 @@ function Editor() {
       textarea.forEach(elem => {
         elem.removeEventListener('input', autoGrowTextarea);
       })
-      input.removeEventListener('keyup',addTags);
+      input.removeEventListener('keyup', addTags);
     }
   });
 
   return (
     <div id='editor'>
       <div id='editor_title'>
-        <button>Add a Cover Image</button>
+        <button >Add a Cover Image</button>
         <textarea
           placeholder='New Post Title Here...'
           id="" rows="1"></textarea>
@@ -72,7 +74,7 @@ function Editor() {
         <div>
           {
             tagList.map(tag => {
-              return <span onClick={()=>removeTag(tag)} className='post-tag'># {tag}&nbsp;&nbsp;
+              return <span onClick={() => removeTag(tag)} className='post-tag'># {tag}&nbsp;&nbsp;
                 <span>&#x2718;</span>
               </span>
             })
@@ -80,17 +82,36 @@ function Editor() {
         </div>
       </div>
       <div id='editor_control'>
-        <Bold />
-        <Italic />
-        <Underline />
-        <Link />
-        <Divider />
-        <Code />
-        <Photo />
-        <Blockquote />
+        <span onClick={controls.bold}>
+          <Bold />
+        </span>
+        <span onClick={controls.italic}>
+          <Italic />
+        </span>
+        <span onClick={controls.underline}>
+          <Underline />
+        </span>
+        <span>
+          <Link />
+        </span>
+        <span>
+          <Divider />
+        </span>
+        <span>
+          <Code />
+        </span>
+        <span>
+          <Photo />
+        </span>
+        <span>
+          <Blockquote />
+        </span>
+
       </div>
       <div id='editor_content'>
-        <textarea placeholder='Your content Here'></textarea>
+        <textarea 
+        onChange={(event)=>localStorage.setItem('md',event.target.value)}
+         placeholder='Your content Here'></textarea>
       </div>
     </div>
   )

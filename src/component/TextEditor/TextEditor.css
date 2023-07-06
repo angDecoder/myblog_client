@@ -22,7 +22,6 @@
     font-size: var(--p);
     font-weight: bold;
     flex-grow: 1;
-    /* background-color: blue; */
     text-align: center;
 }
 
@@ -41,16 +40,18 @@
 
     #TextEditor{
         flex-direction: column-reverse;
-    }
-    #edit_toggle > span{
-        width: 100px;
-        /* padding : 0em; */
-        font-size: 1rem;
+        justify-content: space-evenly;
+        gap : 0em;
+
     }
     #edit_toggle{
         width: 70vw;
-        padding : 0.1em;
-        align-self: center;
+        padding : 0em;
+        justify-content: center;
+        gap : 0.4em;
         cursor: pointer;
+    }
+    #edit_toggle > .navlink{
+        text-align: left;
     }
 }
