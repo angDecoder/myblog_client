@@ -1,3 +1,19 @@
 #Preview{
-    /* display: none; */
+   background-color: #ffffff;
+   min-height: 10vh;
+   flex-grow : 1;
+   margin-block : 0.4em;
+   width: 100svw;
+   padding-block : 1em;
+   padding-inline : 0.5em;
+   overflow-x: hidden;
+   font-size: var(--li);
+}
+
+@media screen and ( min-width : 1025px ) {
+   #Preview{
+      width: 60vw;
+      padding-inline : 1em;
+      margin-right : auto;
+   }
 }

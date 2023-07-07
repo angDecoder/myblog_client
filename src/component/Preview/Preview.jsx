@@ -1,10 +1,47 @@
 import React from 'react';
 import './Preview.css';
+import Markdown from 'markdown-to-jsx';
+import BlockQuote from '../CustomBlocks/BlockQuote';
+import Highlight from '../CustomBlocks/Highlight';
+import Code from '../CustomBlocks/Code';
 
 function Preview() {
   return (
     <div id='Preview'>
-        Preview
+        <Markdown options={{
+          forceBlock : true,
+          overrides : {
+            blockquote : {
+              component : BlockQuote,
+              props : {
+                className : 'blockquote'
+              }
+            },
+            Tip : {
+              component : Highlight,
+              props : {
+                type : 'tip'
+              }
+            },
+            Note : {
+              component : Highlight,
+              props : {
+                type : 'note'
+              }
+            },
+            Warning : {
+              component : Highlight,
+              props : {
+                type : 'warning'
+              }
+            },
+            code : {
+              component : Code
+            }
+          }
+        }}>
+          { localStorage.getItem('md').replace('\n','  \n') }
+        </Markdown>
     </div>
   )
 }

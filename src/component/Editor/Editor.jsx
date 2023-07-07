@@ -16,9 +16,17 @@ function Editor() {
   const [tagList, setTagList] = useState([]);
 
   const autoGrowTextarea = (event) => {
+    const prevHeight = event.target.scrollHeight;
+    const editor = document.querySelector('#editor');
+    const prevPos = editor.scrollTop;
+
     event.target.style.height = '5px';
     const scrollHeight = event.target.scrollHeight;
     event.target.style.height = (scrollHeight) + 'px';
+
+    if (prevHeight === scrollHeight)
+      editor.scrollTop = prevPos;
+
   }
 
   const addTags = (event) => {
@@ -47,7 +55,6 @@ function Editor() {
     const selector = `#editor_title > textarea,
                 #editor_content > textarea`;
     const textarea = document.querySelectorAll(selector);
-
     textarea.forEach(elem => {
       elem.addEventListener('input', autoGrowTextarea);
     });
@@ -63,6 +70,12 @@ function Editor() {
     }
   });
 
+  useEffect(()=>{
+    const initialValue = localStorage.getItem('md');
+    document.querySelector('#editor_content > textarea').value = initialValue;
+    controls.autoGrow();
+  },[]);
+
   return (
     <div id='editor'>
       <div id='editor_title'>
@@ -74,7 +87,9 @@ function Editor() {
         <div>
           {
             tagList.map(tag => {
-              return <span onClick={() => removeTag(tag)} className='post-tag'># {tag}&nbsp;&nbsp;
+              return <span 
+                key={`${tag}`}
+                onClick={() => removeTag(tag)} className='post-tag'>#{tag}&nbsp;&nbsp;
                 <span>&#x2718;</span>
               </span>
             })
@@ -94,7 +109,7 @@ function Editor() {
         <span>
           <Link />
         </span>
-        <span>
+        <span onClick={controls.divider}>
           <Divider />
         </span>
         <span>
@@ -103,15 +118,16 @@ function Editor() {
         <span>
           <Photo />
         </span>
-        <span>
-          <Blockquote />
+        <span onClick={controls.blockquote}>
+          <Blockquote  />
         </span>
 
       </div>
       <div id='editor_content'>
-        <textarea 
-        onChange={(event)=>localStorage.setItem('md',event.target.value)}
-         placeholder='Your content Here'></textarea>
+        <textarea
+          // value={()=>localStorage.getItem('md')}
+          onChange={(event) => localStorage.setItem('md', event.target.value)}
+          placeholder='Your content Here'></textarea>
       </div>
     </div>
   )

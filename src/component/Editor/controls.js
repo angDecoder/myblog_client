@@ -1,7 +1,7 @@
-const getSelelectedText = (pre,post)=>{
+const getSelelectedText = (pre, post,noSelectCollapse) => {
     const input = document.querySelector('#editor_content > textarea');
-    const start = input.selectionStart, end= input.selectionEnd;
-    if( start===end ){
+    const start = input.selectionStart, end = input.selectionEnd;
+    if ( start === end && noSelectCollapse ) {
         input.focus();
         return;
     }
@@ -9,57 +9,87 @@ const getSelelectedText = (pre,post)=>{
     input.setRangeText(`${pre}${selected}${post}`);
     input.selectionStart += pre.length;
     input.selectionEnd -= post.length;
+    localStorage.setItem('md',input.value);
+    autoGrow();
     input.focus();
 }
 
-const bold = ()=> getSelelectedText("**","**");
+const autoGrow = () => {
+    const input = document.querySelector('#editor_content > textarea');
+    const prevHeight = input.scrollHeight;
+    const editor = document.querySelector('#editor');
+    const prevPos = editor.scrollTop;
+    input.style.height = '5px';
+    const scrollHeight = input.scrollHeight;
+    input.style.height = (scrollHeight) + 'px';
+    
+    if( prevHeight===scrollHeight )
+    editor.scrollTop = prevPos;
+}
 
-const italic = ()=> getSelelectedText("_","_");
+const selectEntireBlock = ()=>{
+    const input = document.querySelector('#editor_content > textarea');
+    let start = input.selectionStart, end = input.selectionEnd;
+    const text = input.value;
+    end = text.indexOf('\n',Math.max(0,end-1));
+    end===-1 ? text.lenght : end;
+    start = text.lastIndexOf('\n',Math.max(0,end-1));
+    start === -1 ? 0 : start;
 
-const underline = ()=> getSelelectedText("<u>","</u>");
+    input.selectionStart = start+1, input.selectionEnd = end;
+}
 
-const divider = ()=> getSelelectedText('','--- \n');
+const bold = () => getSelelectedText("**", "**",true);
 
-const tip = ()=>{
+const italic = () => getSelelectedText("_", "_",true);
+
+const underline = () => getSelelectedText("<u>", "</u>",true);
+
+const divider = () => getSelelectedText('\n', '--- \n\n',false);
+
+const blockquote = () =>{
+    selectEntireBlock();
+    getSelelectedText('\n >','\n\n',false);
+}
+
+const tip = () => {
 
 }
 
-const note = ()=>{
+const note = () => {
 
 }
 
-const warning = ()=>{
+const warning = () => {
 
 }
 
-const code = ()=>{
+const code = () => {
 
 }
 
-const photo = ()=>{
+const photo = () => {
 
 }
 
-const link = ()=>{
+const link = () => {
 
 }
 
-const blockquote = ()=>{
-
-}
 
 const controls = {
     bold,
     italic,
     underline,
     divider,
-    tip, 
+    tip,
     note,
     warning,
     code,
     photo,
     link,
-    blockquote
+    blockquote,
+    autoGrow
 }
 
 export default controls;
