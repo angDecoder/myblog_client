@@ -4,6 +4,7 @@ import Markdown from 'markdown-to-jsx';
 import BlockQuote from '../CustomBlocks/BlockQuote';
 import Highlight from '../CustomBlocks/Highlight';
 import Code from '../CustomBlocks/Code';
+import Link from '../CustomBlocks/Link';
 
 function Preview() {
   return (
@@ -37,7 +38,11 @@ function Preview() {
             },
             code : {
               component : Code
-            }
+            },
+            link : {
+              component : Link,
+            },
+            
           }
         }}>
           { localStorage.getItem('md').replace('\n','  \n') }

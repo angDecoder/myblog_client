@@ -15,7 +15,7 @@
 #home-intro > h1{
     font-size : var(--xl);
 }
-#home-intro > img{
+#home-intro > .svg-img{
     display: none;
     /* border-radius: 0.4em; */
 }
@@ -104,7 +104,7 @@
     #home-intro{
         position: relative;
     }
-    #home-intro > img{
+    #home-intro > .svg-img{
         display: block;
         position: absolute;
         right : 50px;

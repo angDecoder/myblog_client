@@ -1,6 +1,6 @@
 import React from 'react';
 import './Home.css';
-import logo from '../../assets/logo.svg'
+import Logo from '../../assets/Logo'
 import scene from '../../assets/user.png';
 import Upvote from '../../assets/Upvote';
 import Bookmark from '../../assets/Bookmark';
@@ -14,7 +14,8 @@ function Home() {
         <h1>Unraveling the Layers <br /> of Knowledge</h1>
         <p>Discover stories, thinking, and <br /> expertise from writers on any topic.</p>
         <button data-btn='black'>Get Started</button>
-        <img src={logo} alt="" />
+        {/* <img src={logo} alt="" /> */}
+        <Logo />
       </section>
 
       <section id='home-postlist'>

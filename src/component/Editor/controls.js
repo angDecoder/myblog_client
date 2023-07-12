@@ -1,16 +1,31 @@
-const getSelelectedText = (pre, post,noSelectCollapse) => {
+// import {  randomUUID } from 'crypto';
+
+const getSelelectedText = (pre, post, noSelectCollapse) => {
     const input = document.querySelector('#editor_content > textarea');
     const start = input.selectionStart, end = input.selectionEnd;
-    if ( start === end && noSelectCollapse ) {
+    if (start === end && noSelectCollapse) {
         input.focus();
         return;
     }
+
     const selected = input.value.slice(start, end);
     input.setRangeText(`${pre}${selected}${post}`);
-    input.selectionStart += pre.length;
-    input.selectionEnd -= post.length;
-    localStorage.setItem('md',input.value);
+
+    localStorage.setItem('md', input.value);
     autoGrow();
+}
+
+const inlineElement = (pre,suff)=>{
+    const input = document.querySelector('#editor_content > textarea');
+    input.selectionStart += pre;
+    input.selectionEnd -= suff;
+    input.focus();
+}
+
+const blockElement = (pre)=>{
+    const input = document.querySelector('#editor_content > textarea');
+    input.selectionStart += pre;
+    input.selectionEnd = input.selectionStart;
     input.focus();
 }
 
@@ -22,60 +37,99 @@ const autoGrow = () => {
     input.style.height = '5px';
     const scrollHeight = input.scrollHeight;
     input.style.height = (scrollHeight) + 'px';
-    
-    if( prevHeight===scrollHeight )
-    editor.scrollTop = prevPos;
+
+    if (prevHeight === scrollHeight)
+        editor.scrollTop = prevPos;
 }
 
-const selectEntireBlock = ()=>{
-    const input = document.querySelector('#editor_content > textarea');
-    let start = input.selectionStart, end = input.selectionEnd;
-    const text = input.value;
-    end = text.indexOf('\n',Math.max(0,end-1));
-    end===-1 ? text.lenght : end;
-    start = text.lastIndexOf('\n',Math.max(0,end-1));
-    start === -1 ? 0 : start;
-
-    input.selectionStart = start+1, input.selectionEnd = end;
+const bold = () =>{
+    const pre = " **" , suff = "** ";
+    getSelelectedText(pre,suff, true);
+    inlineElement(pre.length,suff.length);
 }
 
-const bold = () => getSelelectedText("**", "**",true);
-
-const italic = () => getSelelectedText("_", "_",true);
-
-const underline = () => getSelelectedText("<u>", "</u>",true);
-
-const divider = () => getSelelectedText('\n', '--- \n\n',false);
-
-const blockquote = () =>{
-    selectEntireBlock();
-    getSelelectedText('\n >','\n\n',false);
+const italic = () => {
+    const pre = " _", suff = "_ ";
+    getSelelectedText(pre,suff, true);
+    inlineElement(pre.length,suff.length);
 }
 
-const tip = () => {
-
+const underline = () => {
+    const pre = " <u>", suff = "</u> ";
+    getSelelectedText(pre,suff, true);
+    inlineElement(pre.length,suff.length);
 }
 
-const note = () => {
-
+const divider = () => {
+    const pre = '\n\n --- \n\n';
+    getSelelectedText(pre,"", false);
+    blockElement(pre.length);
 }
 
-const warning = () => {
+const blockquote = () => {
 
-}
-
-const code = () => {
-
-}
-
-const photo = () => {
-
+    getSelelectedText('>','',false);
+    blockElement(1);
 }
 
 const link = () => {
-
+    getSelelectedText('',`[alt text]{link here}`,false);
+    blockElement(1);
 }
 
+const code = () => {
+    let lang = prompt('Language : ', 'javascript');
+    const suff = `\n</code>\n`;
+    const pre = ` \n\n<code language={${lang}}>\n`
+    getSelelectedText(pre, suff, false);
+    blockElement(pre.length);
+}
+
+const tip = () => {
+    const pre = `\n\n<Tip>\n`;
+    const suff = `\n</Tip>\n`;
+    getSelelectedText(pre, suff, false);
+    blockElement(pre.length)
+}
+
+const note = () => {
+    const suff = `\n</Note>  \n`
+    const pre = `\n\n<Note>\n`;
+    getSelelectedText(pre,suff,false);
+    blockElement(pre.length);
+}
+
+const warning = () => {
+    const suff = `\n</Warning>  \n`
+    const pre = `\n\n<Warning>\n`;
+    getSelelectedText(pre,suff,false);
+    blockElement(pre.length);
+}
+
+const photo = (event) => {
+    const [start, end] = getStartEnd();
+    const input = document.querySelector('#editor_content > textarea');
+    input.selectionStart = start, input.selectionEnd = end;
+    const file = event.target.files[0];
+    console.log(file);
+
+    if (file) {
+        const reader = new FileReader();
+
+        reader.onload = (event) => {
+            // file loaded
+            const base64Data = event.target.result;
+            console.log('loaded');
+            // localStorage.setItem(),base64Data);
+        };
+
+        reader.onerror = ()=>{
+
+        }
+
+        reader.readAsDataURL(file);
+    }
+}
 
 const controls = {
     bold,

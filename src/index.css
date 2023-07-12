@@ -25,6 +25,10 @@
   color: rgb(41, 41, 41);
 }
 
+#Preview a{
+  color : var(--link);
+}
+
 #root {
   width: 100vw;
   height: 100svh;

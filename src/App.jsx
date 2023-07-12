@@ -15,7 +15,7 @@ function App() {
     <Routes>
       <Route path='' element={<Layout />} >
         <Route path='' element={<Home />} />
-        <Route path='edit' element={<TextEditor />} >
+        <Route path='edit/:id' element={<TextEditor />} >
           <Route path='' element={<Editor />} />
           <Route path='preview' element={<Preview />} />
         </Route>

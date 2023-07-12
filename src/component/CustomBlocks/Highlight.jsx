@@ -1,23 +1,23 @@
 import React from 'react';
-import Tip from '../../assets/logo.svg';
-import Note from '../../assets/write.svg';
-import Warning from '../../assets/danger.svg';
+import Note from '../../assets/Write';
+import Warning from '../../assets/Danger';
+import Tip from '../../assets/Logo';
 import './Highlight.css'
 
 function Highlight(props) {
     const { type,children } = props;
     console.log(children);
 
-    let imgSrc = Note;
+    let ImgSrc = Note;
     if( type==='warning' )
-        imgSrc = Warning;
+        ImgSrc = Warning;
     else if( type==='tip' )
-        imgSrc = Tip;
+        ImgSrc = Tip;
 
   return (
     <div className={`highlight ${type}`}>
         <p>
-            <img src={imgSrc} alt="" />
+            <ImgSrc />
             {type.toUpperCase()}
         </p>
         <p>

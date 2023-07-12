@@ -1,10 +1,10 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import './Navbar.css';
-import logo from '../../assets/logo.svg';
+import Logo from '../../assets/Logo';
 import ham from '../../assets/hamburger.svg';
 import cross from '../../assets/cross.svg';
-import write from '../../assets/write.svg';
+import Write from '../../assets/Write';
 import login from '../../assets/login.svg';
 import register from '../../assets/register.svg';
 import home from '../../assets/home.svg';
@@ -24,7 +24,7 @@ function Navbar() {
 
   return (
     <header>
-      <img src={logo} alt="logo-img" />
+      <Logo />
       <span id='nav-logo'>INSIGHT</span>
       <img src={ham} id='nav-ham' alt="" onClick={showNav} />
       <nav>
@@ -50,7 +50,7 @@ function Navbar() {
         </NavLink>
 
         <NavLink to='edit' className='navlink'>
-          <img src={write} alt="" className="svg-img" />
+          <Write />
           Create Blog
         </NavLink>
       </nav>

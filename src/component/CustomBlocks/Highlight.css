@@ -16,7 +16,7 @@
     padding-inline: 0.5em;
     padding-block: 0.3em;
 }
-.highlight > p > img{
+.highlight > p > .svg-img{
     width: 30px;
 }
 .tip{
