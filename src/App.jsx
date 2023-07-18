@@ -9,6 +9,8 @@ import Register from './component/Auth/Register';
 import Profile from './component/Profile/Profile';
 import Editor from './component/Editor/Editor';
 import Preview from './component/Preview/Preview';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function App() {
   return (

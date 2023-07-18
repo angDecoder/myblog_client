@@ -24,6 +24,9 @@
   box-sizing: border-box;
   color: rgb(41, 41, 41);
 }
+.Toastify__toast-container{
+  font-size: var(--li);
+}
 
 #Preview a{
   color : var(--link);
@@ -87,6 +90,12 @@ button {
   background-color: black;
   color: whitesmoke;
   min-width: 20vw;
+}
+
+button:disabled{
+  background-color: gray !important;
+  color : white !important;
+  cursor: not-allowed;
 }
 
 button[data-btn='green'] {

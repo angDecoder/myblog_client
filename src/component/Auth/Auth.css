@@ -20,10 +20,9 @@
     flex-direction: column;
     gap : 0.6em;
     align-items: center;
-    /* background-color: red; */
 }
 
-.form-input{
+.form-input > input{
     font-size: var(--li);
     padding-inline : 0.5em;
     padding-block: 0.5em;
@@ -31,14 +30,41 @@
     outline : none;
     border : none;
     background-color: var(--bg2);
-    /* color : var(--bg1); */
+    border : 2px solid var(--aftercolor);
 }
 
-.form-input:focus{
-    border: 2px solid rgb(19, 159, 253);
-}
+
 .form-input.error{
-    border : 2px solid red;
+    --aftercolor : red;
+}
+.form-input.success{
+    --aftercolor : var(--bg5);
+   --aftercontent : '';
+}
+
+.form-input::after{
+    content : var(--aftercontent);
+    color : var(--aftercolor);
+    padding-left: 0.3em;
+    display: block;
+    font-size: var(--li);
+    top : 100%;
+}
+
+#select_img{
+    display: flex;
+    gap : 0.3em;
+    align-items: center;
+}
+
+#select_img > img{
+    width: 50px;
+    height: 50px;
+    padding : 0;
+    border-radius: 99999em;
+    object-fit: cover;
+    object-position: center;
+    border : 2px solid black;
 }
 
 @media screen and ( min-width : 480px ) {
@@ -56,7 +82,6 @@
         justify-content: space-evenly;
     }
     
-
     #Auth > h1 ,
     #form-para{
         width: 100%;
