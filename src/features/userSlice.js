@@ -1,7 +1,8 @@
 import { createAsyncThunk,createSlice } from "@reduxjs/toolkit";
 import { 
     loginUserJwtApi,
-    loginUserGithubApi
+    loginUserGithubApi,
+    autoLoginApi
 } from '../api/auth';
 
 export const USER_STATUS = {
@@ -27,7 +28,34 @@ export const loginUserJwt = createAsyncThunk(
 export const loginUserGithub = createAsyncThunk(
     'user/login/github',
     loginUserGithubApi
+);
+
+export const autoLogin = createAsyncThunk(
+    'user/autologin',
+    autoLoginApi
 )
+
+const loginPending = (state)=>{
+    state.status = USER_STATUS.loading;
+}
+
+const loginFulfilled = (state,{ payload })=>{
+    state.email = payload.email;
+    state.username = payload.username;
+    state.userimg = payload.userimg;
+    state.status = USER_STATUS.loggedin;
+    state.token_type = payload.token_type;
+    state.refresh_token = payload.refresh_token;
+    const myblog_token = {
+        refresh_token : payload.refresh_token,
+        token_type : payload.token_type
+    }
+    localStorage.setItem('myblog-token',JSON.stringify(myblog_token));
+};
+
+const loginRejected = (state)=>{
+    state.status = USER_STATUS.loggedout;
+}
 
 const userSlice = createSlice({
     name : 'user',
@@ -37,39 +65,17 @@ const userSlice = createSlice({
     },
     extraReducers : (builder)=>{
         builder
-        .addCase(loginUserJwt.pending,(state)=>{
-            state.status = USER_STATUS.loading;
-        })
+        .addCase(loginUserJwt.pending,loginPending)
+        .addCase(loginUserJwt.fulfilled,loginFulfilled)
+        .addCase(loginUserJwt.rejected,loginRejected)
 
-        .addCase(loginUserJwt.fulfilled,(state,{ payload })=>{
-            state.email = payload.email;
-            state.username = payload.username;
-            state.userimg = payload.userimg;
-            state.status = USER_STATUS.loggedin;
-        })
+        .addCase(loginUserGithub.pending,loginPending)
+        .addCase(loginUserGithub.fulfilled,loginFulfilled)
+        .addCase(loginUserGithub.rejected,loginRejected)
 
-        .addCase(loginUserJwt.rejected,(state)=>{
-            // console.log('here');
-            state.status = USER_STATUS.loggedout;
-        })
-
-        .addCase(loginUserGithub.pending,(state)=>{
-            state.status = USER_STATUS.loading;
-        })
-
-        .addCase(loginUserGithub.fulfilled,(state,{ payload })=>{
-            state.email = payload.email;
-            state.username = payload.username;
-            state.userimg = payload.userimg;
-            state.status = USER_STATUS.loggedin;
-        })
-
-        .addCase(loginUserGithub.rejected,(state)=>{
-            // console.log('here');
-            state.status = USER_STATUS.loggedout;
-        })
-
-        
+        .addCase(autoLogin.pending,loginPending)
+        .addCase(autoLogin.fulfilled,loginFulfilled)
+        .addCase(autoLogin.rejected,loginRejected)
     }
 });
 
