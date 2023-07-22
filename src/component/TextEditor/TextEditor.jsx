@@ -1,12 +1,14 @@
-import React,{ useState } from 'react';
+import React,{ useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import './TextEditor.css';
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet,useBeforeUnload } from 'react-router-dom';
 
 
 
 function TextEditor() {
 
   const [toLink, setToLink] = useState('preview');
+  const { id } = useParams();
   const toggleNavlink = ()=>{
     if( toLink==='' )
       setToLink('preview');
@@ -14,11 +16,26 @@ function TextEditor() {
       setToLink('');
   }
 
+
+  const saveDraft = ()=>{
+    if( id==='noid' ){
+
+    }
+    else{
+
+    }
+  }
+
   return (
     <div id='TextEditor'>
         <div id='edit_toggle'>
-          <button>Save Draft</button>
-          <button data-btn='blue'>Publish</button>
+          <button onClick={saveDraft}>Save Draft</button>
+          {
+            id!=='noid' ? 
+              <button data-btn='blue'>Publish</button>:
+              <></>  
+          }
+
           <NavLink onClick={toggleNavlink} className='navlink' to={toLink}>{
             toLink === '' ? 'Edit Here' : 'Preview'
           }</NavLink>

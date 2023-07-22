@@ -26,6 +26,15 @@ header > img {
     width: 8vw;
 }
 
+#nav-userimg{
+    width: 45px;
+    height: 45px;
+    border-radius: 9999em;
+    object-fit: cover;
+    object-position: center;
+    margin-inline: 0.5em;
+}
+
 nav{
     position: fixed;
     top : 0;
@@ -61,6 +70,8 @@ nav > .navlink{
 nav > img{
     align-self: flex-end;
 }
+
+
 
 @media screen and ( min-width : 480px ) {
     header > img{

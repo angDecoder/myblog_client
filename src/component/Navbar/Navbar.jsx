@@ -1,5 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { USER_STATUS } from '../../features/userSlice';
 import './Navbar.css';
 import Logo from '../../assets/Logo';
 import ham from '../../assets/hamburger.svg';
@@ -11,6 +13,15 @@ import home from '../../assets/home.svg';
 import profile from '../../assets/profile.svg';
 
 function Navbar() {
+  let {
+    status,
+    userimg,
+    token_type
+  } = useSelector(state => state.user);
+
+  const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
+  if (token_type === 'JWT' && userimg)
+    userimg = BACKEND_URL + userimg;
 
   const showNav = () => {
     const nav = document.querySelector('nav');
@@ -26,6 +37,11 @@ function Navbar() {
     <header>
       <Logo />
       <span id='nav-logo'>INSIGHT</span>
+      {
+        status === USER_STATUS.loggedin && userimg ?
+          <img src={userimg} alt="userimg" id='nav-userimg' /> :
+          <></>
+      }
       <img src={ham} id='nav-ham' alt="" onClick={showNav} />
       <nav>
         <img src={cross} alt="" className='svg-img' id='nav-close' onClick={hideNav} />
@@ -34,25 +50,38 @@ function Navbar() {
           Home
         </NavLink>
 
-        <NavLink to='profile' className='navlink'>
-          <img src={profile} alt="" className="svg-img" />
-          Profile
-        </NavLink>
+        {
+          status === USER_STATUS.loggedin ?
+            <>
+              <NavLink to='register' className='navlink'>
+                <img src={register} alt="" className="svg-img" />
+                Logout
+              </NavLink>
 
-        <NavLink to='login' className='navlink'>
-          <img src={login} alt="" className="svg-img" />
-          Login
-        </NavLink>
+              <NavLink to='dashboard' className='navlink'>
+                <img src={profile} alt="" className="svg-img" />
+                Dashboard
+              </NavLink>
 
-        <NavLink to='register' className='navlink'>
-          <img src={register} alt="" className="svg-img" />
-          Register
-        </NavLink>
+              <NavLink to='edit/noid' className='navlink'>
+                <Write />
+                Create Post
+              </NavLink>
 
-        <NavLink to='edit' className='navlink'>
-          <Write />
-          Create Blog
-        </NavLink>
+            </>
+            :
+            <>
+              <NavLink to='login' className='navlink'>
+                <img src={login} alt="" className="svg-img" />
+                Login
+              </NavLink>
+
+              <NavLink to='register' className='navlink'>
+                <img src={register} alt="" className="svg-img" />
+                Register
+              </NavLink>
+            </>
+        }
       </nav>
     </header>
   )

@@ -20,10 +20,10 @@
     /* border-radius: 0.4em; */
 }
 
-#home-postlist{
-    padding-block: 2em;
+.post-list{
+    padding-block: 1em;
 }
-#home-postlist > h1{
+.post-list > h2{
     text-align: center;
 }
 
@@ -56,9 +56,10 @@
     border-radius: 9999em;
 }
 
-.card-creator > h4{
+.card-creator > span{
     background-color: black;
-    color : white;
+    font-size: var(--p);
+    color : var(--bg2);
     padding-inline : 0.4em;
     padding-block: 0.1em;
     border-radius: 0.5em;
@@ -89,6 +90,16 @@
     padding-block: 0.2em;
     justify-content: space-evenly;
     padding-inline: 0.5em;
+    align-items: center;
+}
+
+.card-bar > span{
+    background-color: black;
+    padding-inline : 0.4em;
+    padding-block: 0.2em;
+    color : white;
+    border-radius: 0.3em;
+    font-size: var(--li);
 }
 
 @media screen and ( min-width : 480px ) {
@@ -125,7 +136,7 @@
     .card-creator > img{
         width: 50px;
     }
-    #home-postlist{
+    .post-list{
         /* width: 70vw; */
         display: flex;
         margin-inline-start : auto;
@@ -134,7 +145,7 @@
         align-items: center;
         gap : 1em;
     }
-    #home-postlist > h1{
+    .post-list > h2{
         width: 100%;
     }
 }

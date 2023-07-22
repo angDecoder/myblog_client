@@ -69,7 +69,7 @@ export const loginUserJwtApi = async ({ email, password, navigate, to }, thunkAp
         });
         return thunkApi.rejectWithValue({ message: error.response.data.message });
     }
-}
+};
 
 export const loginUserGithubApi = async ({ codeParam, navigate, to }, thunkApi) => {
 
@@ -103,17 +103,20 @@ export const loginUserGithubApi = async ({ codeParam, navigate, to }, thunkApi) 
         });
         return thunkApi.rejectWithValue({ message: error.response.data.message });
     }
-}
+};
 
 export const autoLoginApi = async ({ refresh_token, token_type }, thunkApi) => {
-    const tst = toast.loading('Logging in ... ');
+    const tst = toast.loading('Logging in ... ',{
+        closeOnClick : true
+    });
+    console.log(tst);
     try {
         let res;
         if (token_type === 'JWT')
             res = await ax.post('auth/autologin/jwt', { refresh_token });
         else
             res = await ax.post('auth/autologin/github', { refresh_token });
-
+        console.table(tst);
         toast.update(tst, {
             render: 'User Logged in',
             type: 'success',
@@ -135,4 +138,8 @@ export const autoLoginApi = async ({ refresh_token, token_type }, thunkApi) => {
         });
         return thunkApi.rejectWithValue({ message: error.response.data.message });
     }
+};
+
+export const refreshTokenApi = async ({ refresh_token, token_type }, thunkApi) => {
+    
 }

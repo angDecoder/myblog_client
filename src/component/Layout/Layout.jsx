@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 import './Layout.css';
 import { Outlet } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -10,30 +10,28 @@ function Layout() {
 
   const status = useSelector(state => state.user.status);
   const dispatch = useDispatch();
-  const [tried, setTried] = useState(false);
-  const {
-    refresh_token,
-    token_type
-  } = JSON.parse(localStorage.getItem('myblog-token'));
+  const tried = useRef(false);
 
-  if (!tried && status === USER_STATUS.loggedout) {
-    setTried(true);
-    dispatch(autoLogin({ refresh_token, token_type }));
+  const myblog_token = JSON.parse(localStorage.getItem('myblog-token'));
+
+  if (!tried.current && status === USER_STATUS.loggedout) {
+    if (myblog_token)
+      dispatch(autoLogin(myblog_token));
+
+    tried.current = true;
   }
 
   return (
     <>
-      <ToastContainer />
+    <ToastContainer />
       {
-        tried || status === USER_STATUS.loggedin ?
+        !tried.current || status === USER_STATUS.loading ?
+          <div>Loading ...</div> :
           <>
             <Navbar />
             <Outlet />
           </>
-          :
-          <div> loading ...</div>
       }
-
 
     </>
   )

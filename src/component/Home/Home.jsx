@@ -18,13 +18,31 @@ function Home() {
         <Logo />
       </section>
 
-      <section id='home-postlist'>
-        <h1>Top Posts</h1>
+      <section className='post-list'>
+        <h2>Top Posts</h2>
         <div className='post-card'>
           <div className='card-creator'>
               <img src={scene} alt="" />
               <p>Angshu</p>
-              <h4>Read</h4>
+              <span>Read</span>
+          </div>
+          <img src={scene} alt="" />
+          <div className='card-content'>
+            <h4>This the heading</h4>
+            <p>description : Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe quis quae aut fugiat nemo repudiandae.</p>
+          </div>
+          <div className='card-bar'>
+            <Upvote votes={10} />
+            <Bookmark />
+            <Share />
+          </div>
+        </div>
+        
+        <div className='post-card'>
+          <div className='card-creator'>
+              <img src={scene} alt="" />
+              <p>Angshu</p>
+              <span>Read</span>
           </div>
           <img src={scene} alt="" />
           <div className='card-content'>
@@ -41,7 +59,7 @@ function Home() {
           <div className='card-creator'>
               <img src={scene} alt="" />
               <p>Angshu</p>
-              <h4>Read</h4>
+              <span>Read</span>
           </div>
           <img src={scene} alt="" />
           <div className='card-content'>
@@ -58,7 +76,7 @@ function Home() {
           <div className='card-creator'>
               <img src={scene} alt="" />
               <p>Angshu</p>
-              <h4>Read</h4>
+              <span>Read</span>
           </div>
           <img src={scene} alt="" />
           <div className='card-content'>
@@ -75,7 +93,7 @@ function Home() {
           <div className='card-creator'>
               <img src={scene} alt="" />
               <p>Angshu</p>
-              <h4>Read</h4>
+              <span>Read</span>
           </div>
           <img src={scene} alt="" />
           <div className='card-content'>
@@ -92,7 +110,7 @@ function Home() {
           <div className='card-creator'>
               <img src={scene} alt="" />
               <p>Angshu</p>
-              <h4>Read</h4>
+              <span>Read</span>
           </div>
           <img src={scene} alt="" />
           <div className='card-content'>
@@ -109,7 +127,7 @@ function Home() {
           <div className='card-creator'>
               <img src={scene} alt="" />
               <p>Angshu</p>
-              <h4>Read</h4>
+              <span>Read</span>
           </div>
           <img src={scene} alt="" />
           <div className='card-content'>
@@ -126,41 +144,7 @@ function Home() {
           <div className='card-creator'>
               <img src={scene} alt="" />
               <p>Angshu</p>
-              <h4>Read</h4>
-          </div>
-          <img src={scene} alt="" />
-          <div className='card-content'>
-            <h4>This the heading</h4>
-            <p>description : Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe quis quae aut fugiat nemo repudiandae.</p>
-          </div>
-          <div className='card-bar'>
-            <Upvote votes={10} />
-            <Bookmark />
-            <Share />
-          </div>
-        </div>
-        <div className='post-card'>
-          <div className='card-creator'>
-              <img src={scene} alt="" />
-              <p>Angshu</p>
-              <h4>Read</h4>
-          </div>
-          <img src={scene} alt="" />
-          <div className='card-content'>
-            <h4>This the heading</h4>
-            <p>description : Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe quis quae aut fugiat nemo repudiandae.</p>
-          </div>
-          <div className='card-bar'>
-            <Upvote votes={10} />
-            <Bookmark />
-            <Share />
-          </div>
-        </div>
-        <div className='post-card'>
-          <div className='card-creator'>
-              <img src={scene} alt="" />
-              <p>Angshu</p>
-              <h4>Read</h4>
+              <span>Read</span>
           </div>
           <img src={scene} alt="" />
           <div className='card-content'>

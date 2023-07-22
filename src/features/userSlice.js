@@ -2,7 +2,8 @@ import { createAsyncThunk,createSlice } from "@reduxjs/toolkit";
 import { 
     loginUserJwtApi,
     loginUserGithubApi,
-    autoLoginApi
+    autoLoginApi,
+    refreshTokenApi
 } from '../api/auth';
 
 export const USER_STATUS = {
@@ -16,6 +17,7 @@ const initialState = {
     email : "",
     userimg : "",
     refresh_token : "",
+    access_token : "",
     token_type : "",
     status : USER_STATUS.loggedout
 };
@@ -35,6 +37,11 @@ export const autoLogin = createAsyncThunk(
     autoLoginApi
 )
 
+export const refreshToken = createAsyncThunk(
+    'user/refresh',
+    refreshTokenApi
+)
+
 const loginPending = (state)=>{
     state.status = USER_STATUS.loading;
 }
@@ -46,6 +53,7 @@ const loginFulfilled = (state,{ payload })=>{
     state.status = USER_STATUS.loggedin;
     state.token_type = payload.token_type;
     state.refresh_token = payload.refresh_token;
+    state.access_token = payload.access_token;
     const myblog_token = {
         refresh_token : payload.refresh_token,
         token_type : payload.token_type
