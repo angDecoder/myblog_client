@@ -63,7 +63,7 @@ const loginFulfilled = (state,{ payload })=>{
 
 const loginRejected = (state)=>{
     state.status = USER_STATUS.loggedout;
-}
+};
 
 const userSlice = createSlice({
     name : 'user',
@@ -84,6 +84,18 @@ const userSlice = createSlice({
         .addCase(autoLogin.pending,loginPending)
         .addCase(autoLogin.fulfilled,loginFulfilled)
         .addCase(autoLogin.rejected,loginRejected)
+
+        .addCase(refreshToken.fulfilled,(state,{payload})=>{
+            const { access_token,refresh_token } = payload;
+            state.access_token = access_token;
+            state.refresh_token = refresh_token;
+            let token = {
+                refresh_token : payload.refresh_token,
+                token_type : payload.token_type
+            }
+            token = JSON.stringify(token);
+            localStorage.setItem('myblog-token', token);
+        })
     }
 });
 

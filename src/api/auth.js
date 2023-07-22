@@ -106,16 +106,20 @@ export const loginUserGithubApi = async ({ codeParam, navigate, to }, thunkApi) 
 };
 
 export const autoLoginApi = async ({ refresh_token, token_type }, thunkApi) => {
-    const tst = toast.loading('Logging in ... ',{
-        closeOnClick : true
+    const tst = toast.loading('Logging in ... ', {
+        closeOnClick: true
     });
-    console.log(tst);
+
     try {
         let res;
         if (token_type === 'JWT')
-            res = await ax.post('auth/autologin/jwt', { refresh_token });
+            res = await ax.post('auth/autologin/jwt', {
+                refresh_token
+            });
         else
-            res = await ax.post('auth/autologin/github', { refresh_token });
+            res = await ax.post('auth/autologin/github', {
+                refresh_token
+            });
         console.table(tst);
         toast.update(tst, {
             render: 'User Logged in',
@@ -140,6 +144,34 @@ export const autoLoginApi = async ({ refresh_token, token_type }, thunkApi) => {
     }
 };
 
-export const refreshTokenApi = async ({ refresh_token, token_type }, thunkApi) => {
-    
-}
+export const refreshTokenApi = async (thunkApi) => {
+
+    const { refresh_token,token_type } = JSON.parse(
+        localStorage.getItem('myblog-token')
+    );
+    try {
+        let res = {};
+
+        if( !refresh_token || !token_type ) 
+            throw new Error('token not found');
+
+        if (token_type === 'JWT')
+            res = await ax.post('auth/refresh/jwt', {
+                refresh_token
+            });
+        else
+            res = await ax.post('auth/refresh/github', {
+                refresh_token
+            });
+
+        return {
+            ...res.data,
+            token_type
+        };
+        
+    } catch (error) {
+        const message = error?.response?.data?.message || "some error occured";
+        return thunkApi.rejectWithValue({ message });
+
+    }
+};

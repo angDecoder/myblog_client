@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { refreshToken } from '../features/userSlice';
 import axios from 'axios';
-import { toast } from 'react-toastify';
-import { useNavigate,useLocation } from 'react-router-dom';
+import { refreshToken } from '../features/userSlice';
+// import { toast } from 'react-toastify';
+// import { useNavigate,useLocation } from 'react-router-dom';
 
 
 
@@ -14,6 +14,7 @@ const ax = axios.create({
 function usePrivateAxios() {
 
     let {access_token,refresh_token,token_type} = useSelector(state=>state.user);
+    const dispatch = useDispatch();
     
 
     useEffect(() => {
@@ -32,10 +33,19 @@ function usePrivateAxios() {
 
         const resInterceptor = ax.interceptors.response.use(
             (res)=>res,
-            (error)=>{
+            async (error)=>{
                 let prevRequest = error?.config;
-                if( error?.response?.status===401 && prevRequest?.sent!==true ){
-                    
+                try {
+                    if( error?.response?.status==401 && prevRequest?.sent!==true ){
+                        prevRequest.sent = true;
+                        let res = await dispatch(refreshToken());
+                        const { access_token } = res.payload;
+                        
+                        prevRequest.headers['Authorization'] = `Bearer ${access_token}`;
+                        return ax(prevRequest);
+                    }
+                } catch (error) {
+                    return Promise.reject(error);
                 }
             }
         );

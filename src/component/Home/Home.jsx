@@ -6,7 +6,6 @@ import Upvote from '../../assets/Upvote';
 import Bookmark from '../../assets/Bookmark';
 import Share from '../../assets/Share';
 
-
 function Home() {
   return (
     <div id='Home'>

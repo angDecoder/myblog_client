@@ -15,19 +15,25 @@ function Login() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const codeParam = searchParams.get('code');
+  console.log(codeParam);
 
   useEffect(() => {
-    const codeParam = searchParams.get('code');
-    console.log(codeParam);
-
-    if (codeParam)
+    console.log('useEffect');
+    if (codeParam && userStatus===USER_STATUS.loggedout){
       dispatch(loginUserGithub({
         codeParam,
         navigate,
         to: location?.state?.to || '/'
       }));
+      console.log('dispatched');
+    }
 
-  }, []);
+    ()=>{
+      console.log(codeParam,'exit');
+    }
+
+  }, [codeParam]);
 
   const loginWithGithub = () => {
     window.location.assign(`https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}`);
