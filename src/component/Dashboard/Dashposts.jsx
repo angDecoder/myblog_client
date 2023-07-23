@@ -1,8 +1,14 @@
-import React from 'react';
+import React,{ useEffect } from 'react';
 import scene from '../../assets/user.png';
+import usePrivateAxios from '../../hooks/usePrivateAxios';
+import { useDispatch } from 'react-redux';
+import { getAllDrafts } from '../../features/draftSlice';
 
 
 function Dashposts() {
+
+    
+
     return (
         <>
             <div id='post-stats'>

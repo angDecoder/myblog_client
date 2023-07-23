@@ -4,6 +4,7 @@ import { getAllDraftsApi } from '../api/draft';
 
 const initialState = {
     totalDraft : 0,
+    loading : false,
     draftById : {
         'noid' : {
             id : 'noid',
@@ -29,7 +30,20 @@ const draftSlice = createSlice({
 
     },
     extraReducers : (builder)=>{
-        
+        builder
+        .addCase(getAllDrafts.pending,(state)=>{
+            state.loading = true;
+        })
+        .addCase(getAllDrafts.fulfilled,(state,{payload})=>{
+            state.loading = false;
+            console.log(payload);
+            payload.drafts.forEach(elem=>{
+                state.draftById[`${elem.id}`] = elem;
+            })
+        })
+        .addCase(getAllDrafts,(state)=>{
+            state.loading = false;
+        })
     }
 });
 

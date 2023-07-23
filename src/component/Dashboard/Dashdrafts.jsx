@@ -1,7 +1,18 @@
-import React from 'react';
+import React,{ useEffect } from 'react';
 import scene from '../../assets/user.png';
+import { useDispatch } from 'react-redux';
+import usePrivateAxios from '../../hooks/usePrivateAxios';
+import { getAllDrafts } from '../../features/draftSlice';
 
 function Dashdrafts() {
+
+    const ax = usePrivateAxios();
+    const dispatch = useDispatch();
+
+    useEffect(()=>{
+        dispatch(getAllDrafts({ax}));
+    },[]);
+
     return (
         <div className='post-list'>
             <h2>All Drafts</h2>

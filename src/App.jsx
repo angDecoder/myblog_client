@@ -13,27 +13,33 @@ import 'react-toastify/dist/ReactToastify.css';
 import Dashposts from './component/Dashboard/Dashposts';
 import Dashdrafts from './component/Dashboard/Dashdrafts';
 import Dashbookmark from './component/Dashboard/Dashbookmark';
+import ProtectedRoute from './component/ProtectedRoute/ProtectedRoute';
 
 
 function App() {
   return (
     <Routes>
       <Route path='' element={<Layout />} >
-        <Route path='' element={<Home />} />
-        <Route
-          path='edit/:id'
-          element={<TextEditor />}
-        >
-          <Route path='' element={<Editor />} />
-          <Route path='preview' element={<Preview />} />
-        </Route>
+
         <Route path='login' element={<Login />} />
         <Route path='register' element={<Register />} />
-        <Route path='dashboard' element={<Dashboard />} >
-          <Route path='' element={<Dashposts />} />
-          <Route path='draft' element={<Dashdrafts />} />
-          <Route path='bookmark' element={<Dashbookmark />} />
+        <Route path='' element={<Home />} />
+
+        <Route path='' element={<ProtectedRoute />} >
+
+          <Route path='edit/:id' element={<TextEditor />} >
+            <Route path='' element={<Editor />} />
+            <Route path='preview' element={<Preview />} />
+          </Route>
+
+          <Route path='dashboard' element={<Dashboard />} >
+            <Route path='' element={<Dashposts />} />
+            <Route path='draft' element={<Dashdrafts />} />
+            <Route path='bookmark' element={<Dashbookmark />} />
+          </Route>
+
         </Route>
+        
       </Route>
     </Routes>
   )

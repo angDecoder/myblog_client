@@ -105,7 +105,7 @@ export const loginUserGithubApi = async ({ codeParam, navigate, to }, thunkApi) 
     }
 };
 
-export const autoLoginApi = async ({ refresh_token, token_type }, thunkApi) => {
+export const autoLoginApi = async ({ refresh_token, token_type,navigate,to }, thunkApi) => {
     const tst = toast.loading('Logging in ... ', {
         closeOnClick: true
     });
@@ -128,8 +128,7 @@ export const autoLoginApi = async ({ refresh_token, token_type }, thunkApi) => {
             isLoading: false,
             closeOnClick: true
         })
-
-        console.log('here');
+        navigate(to);
         return res.data;
     } catch (error) {
         const message = error?.response?.data?.message || "some error occured";

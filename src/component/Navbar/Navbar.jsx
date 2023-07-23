@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector,useDispatch } from 'react-redux';
 import { USER_STATUS } from '../../features/userSlice';
 import './Navbar.css';
 import Logo from '../../assets/Logo';
@@ -11,6 +11,7 @@ import login from '../../assets/login.svg';
 import register from '../../assets/register.svg';
 import home from '../../assets/home.svg';
 import profile from '../../assets/profile.svg';
+import { logoutUser } from '../../features/userSlice'
 
 function Navbar() {
   let {
@@ -18,6 +19,8 @@ function Navbar() {
     userimg,
     token_type
   } = useSelector(state => state.user);
+
+  const dispatch = useDispatch();
 
   const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
   if (token_type === 'JWT' && userimg)
@@ -53,10 +56,10 @@ function Navbar() {
         {
           status === USER_STATUS.loggedin ?
             <>
-              <NavLink to='register' className='navlink'>
+              <span onClick={()=>dispatch(logoutUser())} className='navlink'>
                 <img src={register} alt="" className="svg-img" />
                 Logout
-              </NavLink>
+              </span>
 
               <NavLink to='dashboard' className='navlink'>
                 <img src={profile} alt="" className="svg-img" />

@@ -1,12 +1,10 @@
-import axios from 'axios';
 
-// const ax = axios.create({
-//     baseURL : import.meta.env.VITE_APP_BACKEND_URL,
-//     headers : {
-//         Authorization : 
-//     }
-// })
-
-export const getAllDraftsApi = ({},thunkApi)=>{
-
+export const getAllDraftsApi = async ({ ax }, thunkApi) => {
+    try {
+        const res = await ax.get('draft');
+        return res.data;
+    } catch (error) {
+        const message = error?.response?.data?.message || "some error occured";
+        return thunkApi.rejectWithValue({ message });
+    }
 }

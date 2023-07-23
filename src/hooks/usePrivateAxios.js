@@ -2,10 +2,6 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { refreshToken } from '../features/userSlice';
-// import { toast } from 'react-toastify';
-// import { useNavigate,useLocation } from 'react-router-dom';
-
-
 
 const ax = axios.create({
     baseURL: import.meta.env.VITE_APP_BACKEND_URL,
@@ -44,6 +40,9 @@ function usePrivateAxios() {
                         prevRequest.headers['Authorization'] = `Bearer ${access_token}`;
                         return ax(prevRequest);
                     }
+                    else
+                        throw new Error('refresh token expired login again');
+                    
                 } catch (error) {
                     return Promise.reject(error);
                 }
@@ -59,4 +58,4 @@ function usePrivateAxios() {
     return ax;
 }
 
-export default usePrivateAxios
+export default usePrivateAxios;
