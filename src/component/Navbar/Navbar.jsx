@@ -66,7 +66,7 @@ function Navbar() {
                 Dashboard
               </NavLink>
 
-              <NavLink to='edit/noid' className='navlink'>
+              <NavLink to='/editor/edit/noid' className='navlink'>
                 <Write />
                 Create Post
               </NavLink>

@@ -57,7 +57,7 @@ function TextEditor() {
   }
 
   const publishTheDraft = ()=>{
-      dispatch( publishDraft({ax,id,navigate }) );
+      dispatch( publishDraft({ ax,id,navigate }) );
   }
 
   return (

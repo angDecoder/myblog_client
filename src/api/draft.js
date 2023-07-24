@@ -71,7 +71,7 @@ export const updateDraftApi = async ({ ax,draft }, thunkApi) => {
             isLoading: false,
             closeOnClick: true
         });
-        return thunkApi.rejectWithValue({ message: error.response.data.message });
+        return thunkApi.rejectWithValue({ message });
     }
 }
 
@@ -89,7 +89,7 @@ export const publishDraftApi = async ({ id,navigate,ax }, thunkApi) => {
             closeOnClick: true
         });
 
-        navigate('/post/' + draft.id);
+        navigate('/post/' + id);
         return {id};
         
     } catch (error) {
@@ -101,6 +101,6 @@ export const publishDraftApi = async ({ id,navigate,ax }, thunkApi) => {
             isLoading: false,
             closeOnClick: true
         });
-        return thunkApi.rejectWithValue({ message: error.response.data.message });
+        return thunkApi.rejectWithValue({ message });
     }
 }

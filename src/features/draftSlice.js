@@ -108,7 +108,8 @@ const draftSlice = createSlice({
 
             // publish draft
             .addCase(publishDraft.fulfilled,(state,{ payload })=>{
-                console.log(payload);
+                delete state.draftById[payload.id]
+                delete state.edit[payload.id];
             })
 
     }

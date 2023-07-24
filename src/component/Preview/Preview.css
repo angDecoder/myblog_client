@@ -9,28 +9,13 @@
    overflow-x: hidden;
    font-size: var(--li);
 }
-#post-coverimg{
-   width: 100%;
-   aspect-ratio: 5/2;
-   margin-block: 1em;
-   object-fit: cover;
-   object-position: center;
-}
-#post-meta{
-   margin-bottom: 2em;
-}
-
-.post-tag{
-   font-size: var(--li);
-}
 
 @media screen and ( min-width : 1025px ) {
    #Preview{
-      width: 55vw;
+      width: 65vw;
       margin : auto;
-      padding-inline : 1em;
+      padding-inline : 3em;
       margin-right : auto;
-      padding-inline : 0.5em;
    }
 
 }

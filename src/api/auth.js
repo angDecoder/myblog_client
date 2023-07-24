@@ -120,7 +120,7 @@ export const autoLoginApi = async ({ refresh_token, token_type,navigate,to }, th
             res = await ax.post('auth/autologin/github', {
                 refresh_token
             });
-        console.table(tst);
+            
         toast.update(tst, {
             render: 'User Logged in',
             type: 'success',

@@ -13,4 +13,33 @@ export const getPostByIdApi = async({ id })=>{
     } catch (error) {
         return  new Error(error);
     }
+};
+
+export const addCommentApi = async({ id,email,comment,ax })=>{
+    const t = toast.loading('Posting comment .... ');
+
+    try {
+        await ax.post('post/comment',{
+            id,
+            email,
+            comment
+        });
+        toast.update(t, {
+            render: 'Comment saved',
+            type: 'success',
+            autoClose: true,
+            isLoading: false,
+            closeOnClick: true
+        });
+    } catch (error) {
+        const message = error?.response?.data?.message || "some error occured";
+        toast.update(t, {
+            render: message,
+            type: 'error',
+            autoClose: true,
+            isLoading: false,
+            closeOnClick: true
+        });
+        return new Error(message);
+    }
 }
