@@ -71,11 +71,29 @@
     outline : none;
 }
 
-#editor_title > textarea{
+#editor_title > textarea.title{
     font-size: var(--h1);
 }
-#editor_title > button{
-    background-color: var(--bg3);
+
+#editor_coverimg{
+    display: flex;
+    gap : 1em;
+    align-items: center;
+}
+
+#editor_title  img{
+    width: 100px;
+    aspect-ratio: 2/1;
+    object-fit: cover;
+    object-position: center;
+}
+#editor_title > textarea{
+    font-size: var(--p);
+}
+
+#editor_title  label{
+    /* background-color: var(--bg3); */
+    color : white !important;
 }
 #editor_content > textarea{
     font-size : var(--p);

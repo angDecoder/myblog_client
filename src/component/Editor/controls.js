@@ -1,5 +1,3 @@
-// import {  randomUUID } from 'crypto';
-
 const getSelelectedText = (pre, post, noSelectCollapse) => {
     const input = document.querySelector('#editor_content > textarea');
     const start = input.selectionStart, end = input.selectionEnd;
@@ -11,7 +9,6 @@ const getSelelectedText = (pre, post, noSelectCollapse) => {
     const selected = input.value.slice(start, end);
     input.setRangeText(`${pre}${selected}${post}`);
 
-    localStorage.setItem('md', input.value);
     autoGrow();
 }
 
@@ -107,28 +104,9 @@ const warning = () => {
 }
 
 const photo = (event) => {
-    const [start, end] = getStartEnd();
-    const input = document.querySelector('#editor_content > textarea');
-    input.selectionStart = start, input.selectionEnd = end;
-    const file = event.target.files[0];
-    console.log(file);
-
-    if (file) {
-        const reader = new FileReader();
-
-        reader.onload = (event) => {
-            // file loaded
-            const base64Data = event.target.result;
-            console.log('loaded');
-            // localStorage.setItem(),base64Data);
-        };
-
-        reader.onerror = ()=>{
-
-        }
-
-        reader.readAsDataURL(file);
-    }
+    const suff = `\n\n ![alt text](Image Url) \n\n`;
+    const pre = "";
+    getSelelectedText(pre,suff,false);
 }
 
 const controls = {

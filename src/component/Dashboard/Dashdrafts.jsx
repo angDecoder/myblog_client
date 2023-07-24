@@ -1,33 +1,74 @@
-import React,{ useEffect } from 'react';
+import React, { useEffect } from 'react';
 import scene from '../../assets/user.png';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import usePrivateAxios from '../../hooks/usePrivateAxios';
-import { getAllDrafts } from '../../features/draftSlice';
+import { addToEdit, getAllDrafts } from '../../features/draftSlice';
 
 function Dashdrafts() {
 
     const ax = usePrivateAxios();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
+    const {
+        totalDraft,
+        loading,
+        fetched,
+        draftById
+    } = useSelector(state => state.draft);
 
-    useEffect(()=>{
-        dispatch(getAllDrafts({ax}));
-    },[]);
+    let drafts = Object.keys(draftById).map(elem => {
+        return draftById[elem];
+    });
+
+    const editTheDraft = (id)=>{
+        dispatch( addToEdit({id}) );
+        navigate('/editor/edit/'+id);
+    }
+
+    const previewDraft = (id)=>{
+        dispatch( addToEdit({id}) );
+        navigate('/editor/preview/' + id);
+    }
+
+    console.log(drafts);
+
+    useEffect(() => {
+        if (!fetched)
+            dispatch(getAllDrafts({ ax }));
+    }, []);
 
     return (
         <div className='post-list'>
             <h2>All Drafts</h2>
-            <div className='post-card'>
-                <div className='card-creator'>
-                    <span>Edit</span>
-                    <span>Preview</span>
-                    <span>Publish</span>
-                </div>
-                <img src={scene} alt="" />
-                <div className='card-content'>
-                    <h4>This the heading</h4>
-                    <p>description : Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe quis quae aut fugiat nemo repudiandae.</p>
-                </div>
-            </div>
+
+            {
+                totalDraft===0 ? <></> :
+                    drafts.map(elem => {
+                        return <div key={elem.id} className='post-card'>
+                            <div className='card-creator'>
+                                <span onClick={()=>editTheDraft(elem.id)}>Edit</span>
+                                <span onClick={()=>previewDraft(elem.id)}>Preview</span>
+                                <span onClick={()=>deleteDraft(elem.id)}>Remove</span>
+                            </div>
+                            {
+                                !elem.cover_image ? <></> :
+                                <img src={BACKEND_URL+elem.cover_image} alt="" />
+                            }
+                            <div className='card-content'>
+                                <h4>{elem.title}</h4>
+                                <p>{elem.description}</p>
+                            </div>
+                        </div>
+                    })
+            }
+            {
+                fetched && !loading && totalDraft===0 ? 
+                <p>No Drafts available</p> : 
+                <></>
+            }
+
         </div>
     )
 }

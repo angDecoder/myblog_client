@@ -4,16 +4,33 @@
    flex-grow : 1;
    margin-block : 0.4em;
    width: 100svw;
-   padding-block : 1em;
+   padding-bottom : 1em;
    padding-inline : 0.5em;
    overflow-x: hidden;
+   font-size: var(--li);
+}
+#post-coverimg{
+   width: 100%;
+   aspect-ratio: 5/2;
+   margin-block: 1em;
+   object-fit: cover;
+   object-position: center;
+}
+#post-meta{
+   margin-bottom: 2em;
+}
+
+.post-tag{
    font-size: var(--li);
 }
 
 @media screen and ( min-width : 1025px ) {
    #Preview{
-      width: 60vw;
+      width: 55vw;
+      margin : auto;
       padding-inline : 1em;
       margin-right : auto;
+      padding-inline : 0.5em;
    }
+
 }

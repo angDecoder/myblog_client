@@ -14,6 +14,8 @@ import Dashposts from './component/Dashboard/Dashposts';
 import Dashdrafts from './component/Dashboard/Dashdrafts';
 import Dashbookmark from './component/Dashboard/Dashbookmark';
 import ProtectedRoute from './component/ProtectedRoute/ProtectedRoute';
+import Post from './component/Post/Post';
+import Draft from './component/Draft/Draft';
 
 
 function App() {
@@ -24,13 +26,17 @@ function App() {
         <Route path='login' element={<Login />} />
         <Route path='register' element={<Register />} />
         <Route path='' element={<Home />} />
+        <Route path='post/:id' element={<Post />} />
+
 
         <Route path='' element={<ProtectedRoute />} >
 
-          <Route path='edit/:id' element={<TextEditor />} >
-            <Route path='' element={<Editor />} />
-            <Route path='preview' element={<Preview />} />
+          <Route path='editor' element={<TextEditor />} >
+            <Route path='edit/:id' element={<Editor />} />
+            <Route path='preview/:id' element={<Preview />} />
           </Route>
+          
+          <Route path='draft/:id' element={<Draft />} />
 
           <Route path='dashboard' element={<Dashboard />} >
             <Route path='' element={<Dashposts />} />
@@ -39,7 +45,7 @@ function App() {
           </Route>
 
         </Route>
-        
+
       </Route>
     </Routes>
   )

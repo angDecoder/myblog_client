@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams, useOutletContext } from 'react-router-dom';
 import './Editor.css';
 import Blockquote from '../../assets/Blockquote';
 import Bold from '../../assets/Bold';
@@ -12,15 +14,41 @@ import controls from './controls';
 import Note from '../../assets/Write';
 import Tip from '../../assets/Logo';
 import Warning from '../../assets/Danger';
-// import verticalDot from '../../assets/vertical-dot.svg';
 import VerticalDot from '../../assets/VerticalDot';
 
 
 function Editor() {
 
-  const [tagList, setTagList] = useState([]);
+  const { id } = useParams();
+  const editorControlRef = useRef(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const contentRef = useRef();
+  const { draft, setDraft, changes,setChanges } = useOutletContext();
+  // console.log(draft.cover_image);
 
-  const autoGrowTextarea = (event) => {
+  // adding event listener
+  useEffect(() => {
+
+    const selector = `#editor_title > textarea,
+                  #editor_content > textarea`;
+    const textarea = document.querySelectorAll(selector);
+    textarea.forEach(elem => {
+      elem.addEventListener('input', autoGrowTextarea);
+    });
+
+    const input = document.querySelector(`#editor_title > input[type='text']`);
+    input.addEventListener('keyup', addTags);
+    controls.autoGrow();
+
+    return () => {
+      textarea.forEach(elem => {
+        elem.removeEventListener('input', autoGrowTextarea);
+      })
+      input.removeEventListener('keyup', addTags);
+    }
+  });
+
+  var autoGrowTextarea = (event) => {
     const prevHeight = event.target.scrollHeight;
     const editor = document.querySelector('#editor');
     const prevPos = editor.scrollTop;
@@ -34,11 +62,12 @@ function Editor() {
 
   }
 
-  const addTags = (event) => {
+  var addTags = (event) => {
     if (event.key === 'Enter') {
       let text = event.target.value.trim().toLowerCase();
-      if (text !== '' && !tagList.includes(text) && tagList.length < 4)
-        setTagList([...tagList, text]);
+      if (text !== '' && !draft.tags.includes(text) && draft.tags.length < 4)
+        editCurrentDraft([...draft.tags, text], 'tags');
+
       else
         event.target.placeholder = 'No more tags';
 
@@ -46,54 +75,78 @@ function Editor() {
     }
   }
 
-  const removeTag = (tag) => {
-    const newTagList = tagList.filter(elem => elem !== tag);
-    setTagList(newTagList);
+  var removeTag = (tag) => {
+    const newTagList = draft.tags.filter(elem => elem !== tag);
+    editCurrentDraft(newTagList, 'tags');
     const input = document.querySelector('#editor_title > input');
     input.placeholder = 'Add upto 4 tags ...';
   }
-  const editorControlRef = useRef(null);
-  // const [isOpen, openHandler] = useClickOutside(editorControlRef);
-  const [isOpen, setIsOpen] = useState(false);
 
-  // adding event listener
-  useEffect(() => {
+  const editCurrentDraft = (value, property) => {
+    let newDraft = { ...draft };
+    newDraft[property] = value;
+    setDraft(newDraft);
+    const newChanges = {...changes };
+    newChanges[property] = true;
+    setChanges(newChanges);
+  }
 
-    const selector = `#editor_title > textarea,
-                #editor_content > textarea`;
-    const textarea = document.querySelectorAll(selector);
-    textarea.forEach(elem => {
-      elem.addEventListener('input', autoGrowTextarea);
-    });
+  const onClickController = (property) => {
+    controls[property]();
+    setDraft({ ...draft, content: contentRef.current.value });
+  }
 
-    const input = document.querySelector('#editor_title > input');
-    input.addEventListener('keyup', addTags);
+  const selectCoverImage = (event) => {
+    const file = event.target.files[0];
 
-    return () => {
-      textarea.forEach(elem => {
-        elem.removeEventListener('input', autoGrowTextarea);
-      })
-      input.removeEventListener('keyup', addTags);
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        const base64Data = event.target.result;
+        setDraft({ ...draft, cover_image: base64Data });
+      };
+
+      reader.readAsDataURL(file);
     }
-  });
+  }
 
-  useEffect(() => {
-    const initialValue = localStorage.getItem('md');
-    document.querySelector('#editor_content > textarea').value = initialValue;
-    controls.autoGrow();
-  }, []);
+  const removeCoverImg = ()=>{
+    setDraft({ ...draft,cover_image : '' });
+    document.querySelector('#select_coverimg').value = '';
+  }
 
   return (
     <div id='editor'>
       <div id='editor_title'>
-        <button >Add a Cover Image</button>
+
+        <div id='editor_coverimg'>
+          <button>
+            <label htmlFor="select_coverimg">Add Cover Image</label>
+          </button>
+          {
+            draft.cover_image === '' ? <></> :
+              <img onClick={removeCoverImg} src={draft.cover_image} alt="" />
+          }
+        </div>
+        <input accept='image/*'
+          onChange={selectCoverImage}
+          style={{ display: 'none' }}
+          type="file" id="select_coverimg" />
+
         <textarea
+          value={draft.title}
+          onChange={(e) => editCurrentDraft(e.target.value, 'title')}
           placeholder='New Post Title Here...'
-          id="" rows="1"></textarea>
+          className="title" rows="1"></textarea>
+        <textarea
+          value={draft.description}
+          onChange={(e) => editCurrentDraft(e.target.value, 'description')}
+          placeholder='Add Description : upto 50 words'></textarea>
         <input type="text" placeholder='Add upto 4 tags ...' />
         <div>
           {
-            tagList.map(tag => {
+            draft.tags.map(tag => {
               return <span
                 key={`${tag}`}
                 onClick={() => removeTag(tag)} className='post-tag'>#{tag}&nbsp;&nbsp;
@@ -104,50 +157,46 @@ function Editor() {
         </div>
       </div>
       <div id='editor_control'>
-        <span style={{ "--desc": "'Bold'" }} onClick={controls.bold}>
+        <span style={{ "--desc": "'Bold'" }} onClick={() => onClickController('bold')}>
           <Bold />
         </span>
-        <span style={{ "--desc": "'Italic'" }} onClick={controls.italic}>
+        <span style={{ "--desc": "'Italic'" }} onClick={() => onClickController('italic')}>
           <Italic />
         </span>
-        <span style={{ "--desc": "'Underline'" }} onClick={controls.underline}>
+        <span style={{ "--desc": "'Underline'" }} onClick={() => onClickController('underline')}>
           <Underline />
         </span>
-        <span style={{ "--desc": "'Link'" }} onClick={controls.link}>
+        <span style={{ "--desc": "'Link'" }} onClick={() => onClickController('link')}>
           <Link />
         </span>
-        <span style={{ "--desc": "'Divider'" }} onClick={controls.divider}>
+        <span style={{ "--desc": "'Divider'" }} onClick={() => onClickController('divider')}>
           <Divider />
         </span>
-        <span style={{ "--desc": "'Code'" }} onClick={controls.code}>
+        <span style={{ "--desc": "'Code'" }} onClick={() => onClickController('code')}>
           <Code />
         </span>
-        {/* <input type="file" id="editor_img" style={{ display : 'none' }} onChange={controls.photo}   />
-        <span>
-          <label htmlFor="editor_img">
-              <Photo />
-          </label>
-        </span> */}
+        <span style={{ "--desc": "'Image'" }} onClick={() => onClickController('photo')} >
+          <Photo />
+        </span>
 
-
-        <span id='extra-control' ref={editorControlRef} onClick={()=>setIsOpen(!isOpen)}>
+        <span id='extra-control' ref={editorControlRef} onClick={() => setIsOpen(!isOpen)}>
           <VerticalDot />
           {
             !isOpen ? <></> :
               <div >
-                <span onClick={controls.blockquote}>
+                <span onClick={() => onClickController('blockquote')}>
                   <Blockquote />
                   <p>Blockquote</p>
                 </span>
-                <span onClick={controls.tip}>
+                <span onClick={() => { onClickController('tip') }}>
                   <Tip />
                   <p>Tip</p>
                 </span>
-                <span onClick={controls.warning}>
+                <span onClick={() => onClickController('warning')}>
                   <Warning />
                   <p>Warning</p>
                 </span>
-                <span onClick={controls.note}>
+                <span onClick={() => onClickController('note')}>
                   <Note />
                   <p>Note</p>
                 </span>
@@ -158,8 +207,9 @@ function Editor() {
       </div>
       <div id='editor_content'>
         <textarea
-          // value={()=>localStorage.getItem('md')}
-          onChange={(event) => localStorage.setItem('md', event.target.value)}
+          ref={contentRef}
+          value={draft.content}
+          onChange={(e) => editCurrentDraft(e.target.value, 'content')}
           placeholder='Your content Here'></textarea>
       </div>
     </div>

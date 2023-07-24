@@ -57,9 +57,9 @@
 }
 
 .card-creator > span{
-    background-color: black;
-    font-size: var(--p);
-    color : var(--bg2);
+    background-color: var(--bg2);
+    font-size: var(--li);
+    color : black;
     padding-inline : 0.4em;
     padding-block: 0.1em;
     border-radius: 0.5em;
@@ -147,5 +147,14 @@
     }
     .post-list > h2{
         width: 100%;
+    }
+    .card-creator > span{
+        cursor: pointer;
+        transition-property: color,background-color;
+        transition-duration: 300ms;
+    }
+    .card-creator > span:hover{
+        background-color: black;
+        color : white;
     }
 }
