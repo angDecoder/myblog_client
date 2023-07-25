@@ -10,11 +10,11 @@ export const getAllDraftsApi = async ({ ax }, thunkApi) => {
     }
 };
 
-export const createDraftApi = async ({ ax,draft,navigate }, thunkApi) => {
+export const createDraftApi = async ({ ax, draft, navigate }, thunkApi) => {
     const t = toast.loading('Creating Draft ... ');
 
     try {
-        const res = await ax.post('draft/create',{
+        const res = await ax.post('draft/create', {
             draft
         });
 
@@ -29,7 +29,7 @@ export const createDraftApi = async ({ ax,draft,navigate }, thunkApi) => {
         console.log(res.data);
         let to = '/editor/edit/' + res.data.id;
         navigate(to);
-        return {...res.data,draft};
+        return { ...res.data, draft };
     } catch (error) {
         const message = error?.response?.data?.message || "some error occured";
         toast.update(t, {
@@ -43,12 +43,12 @@ export const createDraftApi = async ({ ax,draft,navigate }, thunkApi) => {
     }
 }
 
-export const updateDraftApi = async ({ ax,draft }, thunkApi) => {
+export const updateDraftApi = async ({ ax, draft }, thunkApi) => {
     const t = toast.loading('Updating Draft ... ');
 
     console.log(draft);
     try {
-        const res = await ax.put('draft/' + draft.id,{
+        const res = await ax.put('draft/' + draft.id, {
             draft
         });
 
@@ -60,8 +60,8 @@ export const updateDraftApi = async ({ ax,draft }, thunkApi) => {
             closeOnClick: true
         });
 
-        return {draft};
-        
+        return { draft };
+
     } catch (error) {
         const message = error?.response?.data?.message || "some error occured";
         toast.update(t, {
@@ -75,7 +75,7 @@ export const updateDraftApi = async ({ ax,draft }, thunkApi) => {
     }
 }
 
-export const publishDraftApi = async ({ id,navigate,ax }, thunkApi) => {
+export const publishDraftApi = async ({ id, navigate, ax }, thunkApi) => {
     const t = toast.loading('Publishing Post ... ');
 
     try {
@@ -90,8 +90,35 @@ export const publishDraftApi = async ({ id,navigate,ax }, thunkApi) => {
         });
 
         navigate('/post/' + id);
-        return {id};
-        
+        return { id };
+
+    } catch (error) {
+        const message = error?.response?.data?.message || "some error occured";
+        toast.update(t, {
+            render: message,
+            type: 'error',
+            autoClose: true,
+            isLoading: false,
+            closeOnClick: true
+        });
+        return thunkApi.rejectWithValue({ message });
+    }
+}
+
+export const deleteDraftApi = async ({ id, ax }, thunkApi) => {
+    const t = toast.loading('Deleting Draft ... ');
+
+    try {
+        await ax.delete('draft/' + id);
+        toast.update(t, {
+            render: 'Draft Deleted',
+            type: 'success',
+            autoClose: true,
+            isLoading: false,
+            closeOnClick: true
+        });
+
+        return { id };
     } catch (error) {
         const message = error?.response?.data?.message || "some error occured";
         toast.update(t, {

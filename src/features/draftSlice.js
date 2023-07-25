@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { createDraftApi, getAllDraftsApi, publishDraftApi, updateDraftApi } from '../api/draft';
+import { createDraftApi, deleteDraftApi, getAllDraftsApi, publishDraftApi, updateDraftApi } from '../api/draft';
 
 
 const noid = {
@@ -40,6 +40,11 @@ export const updateDraft = createAsyncThunk(
 export const publishDraft = createAsyncThunk(
     'draft/publish',
     publishDraftApi
+)
+
+export const deleteDraft = createAsyncThunk(
+    'draft/delete',
+    deleteDraftApi
 )
 
 const draftSlice = createSlice({
@@ -83,7 +88,8 @@ const draftSlice = createSlice({
             })
             .addCase(createDraft.fulfilled, (state, { payload }) => {
                 state.loading = false;
-                const { changes, type, ...edited } = state.edit['noid'];
+                const { changes, type,id, ...edited } = state.edit['noid'];
+                console.log(edited);
                 state.draftById[payload.id] = { ...edited, id: payload.id }
                 state.edit[payload.id] = { ...edited, id: payload.id };
                 state.edit.noid = noid;
@@ -111,7 +117,12 @@ const draftSlice = createSlice({
                 delete state.draftById[payload.id]
                 delete state.edit[payload.id];
             })
+            
 
+            .addCase(deleteDraft.fulfilled,(state,{ payload })=>{
+                delete state.draftById[payload.id];
+                delete state.edit[payload.id];
+            })
     }
 });
 

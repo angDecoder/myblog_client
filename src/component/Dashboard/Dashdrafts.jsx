@@ -3,7 +3,7 @@ import scene from '../../assets/user.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import usePrivateAxios from '../../hooks/usePrivateAxios';
-import { addToEdit, getAllDrafts } from '../../features/draftSlice';
+import { addToEdit, deleteDraft, getAllDrafts } from '../../features/draftSlice';
 
 function Dashdrafts() {
 
@@ -32,6 +32,12 @@ function Dashdrafts() {
         navigate('/editor/preview/' + id);
     }
 
+    const deleteTheDraft = (id)=>{
+        let text = prompt("To Delete draft write : delete",'Write Here' );
+        if( text==='delete' )
+            dispatch( deleteDraft({ax,id}) )
+    }
+
     console.log(drafts);
 
     useEffect(() => {
@@ -50,7 +56,7 @@ function Dashdrafts() {
                             <div className='card-creator'>
                                 <span onClick={()=>editTheDraft(elem.id)}>Edit</span>
                                 <span onClick={()=>previewDraft(elem.id)}>Preview</span>
-                                <span onClick={()=>deleteDraft(elem.id)}>Remove</span>
+                                <span onClick={()=>deleteTheDraft(elem.id)}>Remove</span>
                             </div>
                             {
                                 !elem.cover_image ? <></> :

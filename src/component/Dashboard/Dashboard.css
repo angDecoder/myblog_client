@@ -72,4 +72,9 @@
         align-self: left;
         /* margin-left : 1em; */
     }
+
+    #post-stats{
+        width: 70%;
+        margin : auto;
+    }
 }

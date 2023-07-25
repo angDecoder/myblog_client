@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { createDraft, editDraft, updateDraft,publishDraft } from '../../features/draftSlice';
+import { createDraft, editDraft, updateDraft,publishDraft, addToEdit } from '../../features/draftSlice';
 import usePrivateAxios from '../../hooks/usePrivateAxios';
 import { toast } from 'react-toastify';
 import './TextEditor.css';
@@ -36,6 +36,9 @@ function TextEditor() {
   }
 
   const saveDraft = () => {
+
+    dispatch( addToEdit({id}) );
+    dispatch( editDraft({ draft }) );
 
     if (id === 'noid') {
       const { id, type, ...editedDraft } = draft;
