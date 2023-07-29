@@ -23,6 +23,7 @@ function Layout() {
     tried.current = true;
   }
 
+
   return (
     <>
     <ToastContainer />
@@ -31,7 +32,14 @@ function Layout() {
           <div>Loading ...</div> :
           <>
             <Navbar />
-            <Outlet />
+            <div style={{
+              overflowX : 'hidden',
+              overflowY : 'auto',
+              minHeight : '40vh',
+              position : 'relative'
+            }}>
+              <Outlet />
+            </div>
           </>
       }
 

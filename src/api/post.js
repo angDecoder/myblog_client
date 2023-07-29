@@ -5,15 +5,28 @@ const ax = axios.create({
     baseURL: import.meta.env.VITE_APP_BACKEND_URL,
 });
 
-export const getPostByIdApi = async ({ id }) => {
+export const getPostByIdApi = async ({ id, email }) => {
     try {
-        const res = await ax.get('post/' + id);
+        const res = await ax.get(`post/useid?id=${id}&email=${email}`);
 
         return res.data;
     } catch (error) {
         return new Error(error);
     }
 };
+
+export const getPostCommentApi = async ({ id }, thunkApi) => {
+    try {
+        const res = await ax.get(`post/postcomment/` + id);
+        return { id,...res.data };
+    } catch (error) {
+        const message = error?.response?.data?.message || "some error occured";
+        return thunkApi.rejectWithValue({
+            message,
+            error
+        });
+    }
+}
 
 export const addCommentApi = async ({ id, email, comment, ax }) => {
     const t = toast.loading('Posting comment .... ');
@@ -40,15 +53,15 @@ export const addCommentApi = async ({ id, email, comment, ax }) => {
             isLoading: false,
             closeOnClick: true
         });
-        return thunkApi.rejectWithValue({ message: error.response.data.message });
+        return thunkApi.rejectWithValue({ message });
     }
 }
 
-export const getMyPostApi = async ({ ax },thunkApi) => {
+export const getMyPostApi = async ({ ax }, thunkApi) => {
     const t = toast.loading('Fetching Posts .... ');
     try {
 
-        const res = await ax.get('post/');
+        const res = await ax.get('post/useemail');
 
         toast.update(t, {
             render: 'Posts Fetched',
@@ -70,9 +83,9 @@ export const getMyPostApi = async ({ ax },thunkApi) => {
         });
         return thunkApi.rejectWithValue({ message });
     }
-}
+};
 
-export const deletePostApi = async({ ax,id },thunkApi)=>{
+export const deletePostApi = async ({ ax, id }, thunkApi) => {
     const t = toast.loading('Deleting Posts .... ');
 
     try {
@@ -95,7 +108,53 @@ export const deletePostApi = async({ ax,id },thunkApi)=>{
             isLoading: false,
             closeOnClick: true
         });
-        return thunkApi.rejectWithValue({ message: error.response.data.message });
- 
+        return thunkApi.rejectWithValue({ message });
+
+    }
+};
+
+export const upvotePostApi = async ({ ax, id }, thunkApi) => {
+    try {
+        const res = await ax.put('post/upvote/' + id);
+        return res.data;
+
+    } catch (error) {
+        const message = error?.response?.data?.message || "some error occured";
+        toast("couldn't upvote the post", {
+            type: 'error',
+            autoClose: true,
+            isLoading: false,
+            closeOnClick: true
+        });
+
+        return thunkApi.rejectWithValue({ message });
+    }
+};
+
+export const bookmarkPostApi = async ({ ax, id }, thunkApi) => {
+    try {
+        const res = await ax.put('post/bookmark/' + id);
+        return res.data;
+
+    } catch (error) {
+        const message = error?.response?.data?.message || "some error occured";
+        toast("couldn't bookmark the post", {
+            type: 'error',
+            autoClose: true,
+            isLoading: false,
+            closeOnClick: true
+        });
+
+        return thunkApi.rejectWithValue({ message, id });
+    }
+};
+
+export const getAllPostApi = async ({ email, offset }, thunkApi) => {
+    try {
+        const res = await ax.get(`post/allpost?email=${email}&offset=${offset}`);
+        return res.data;
+    } catch (error) {
+        const message = error?.response?.data?.message || "some error occured";
+        return thunkApi.rejectWithValue({ message });
     }
 }

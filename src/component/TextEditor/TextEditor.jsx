@@ -46,7 +46,7 @@ function TextEditor() {
     }
     else {
       const editedDraft = {};
-      console.log(changes,draft);
+      // console.log(changes,draft);
       Object.keys(changes).forEach(key=>{
         if( changes[key] )
           editedDraft[key] = draft[key];

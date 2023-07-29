@@ -1,7 +1,7 @@
 #Post {
-    overflow-y: auto;
     min-height: 40vh;
     position: relative;
+    background-color: white;
 }
 
 #post-control {
@@ -12,6 +12,7 @@
     bottom: 0;
     width: 100%;
     margin-block: 1.5em;
+    align-items: center;
 }
 
 #post-coverimg {
@@ -30,6 +31,7 @@
     margin-bottom: 1em;
     background-color: var(--bg2);
     padding-bottom: 0.3em;
+    position: relative;
 }
 
 #post-meta>h1 {
@@ -42,6 +44,10 @@
     flex-wrap: wrap;
     justify-content: flex-start;
     gap: 0.3em;
+}
+
+#post-description{
+    padding : 0.4em;
 }
 
 #post-tags > span{
@@ -118,4 +124,37 @@
 #addcomment > textarea:focus{
     border : none;
     outline : none;
+}
+
+
+@media screen and (min-width : 1025px) {
+    #Post{
+        width: 60%;
+        margin: 1em auto;
+    }
+    
+    #post-control{
+        background-color: inherit;
+        position: absolute;
+        flex-direction: column;
+        width: fit-content;
+        height: 60vh;
+        gap : 2em;
+        top : 5%;
+        left : 0;
+        transform: translateX(-100%);
+        
+    }
+    #post-control > .upvote{
+        flex-direction: column;
+    }
+    #post-comment{
+        align-items: flex-start;
+        padding-inline : 2em;
+        gap : 1em;
+        margin-top : 2em;
+    }
+    .comment{
+        width: 40%;
+    }
 }

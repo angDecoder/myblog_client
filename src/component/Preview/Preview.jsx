@@ -29,6 +29,7 @@ function Preview() {
             </span>
           })
         }
+        <p id='post-description'> {draft.description} </p>
       </div>
 
       <Markdown options={{

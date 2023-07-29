@@ -8,7 +8,25 @@ import { deletePost, getMyPost } from '../../features/postSlice';
 function Dashposts() {
 
     const dispatch = useDispatch();
-    const myPosts = useSelector(state => state.post.myPosts);
+    let myPosts = useSelector(state=>state.post.myPosts);
+    let posts = useSelector(state=>{
+        const keys = Object.keys( myPosts.postById );
+        return keys.map(key=>{
+            return state.post.postById[key];
+        });
+    });
+
+    const totalPosts = posts.length;
+    const totalComments = posts.reduce((comm,post)=>{
+        return comm + post.total_comment;
+    },0);
+    const totalUpvotes = posts.reduce((upvote,post)=>{
+        return upvote + post.total_upvote;
+    },0);
+    const totalBookmarked = posts.reduce((book,post)=>{
+        return book + post.bookmarked;
+    },0)
+
     const ax = usePrivateAxios();
     const navigate = useNavigate();
     const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
@@ -33,22 +51,22 @@ function Dashposts() {
             <div id='post-stats'>
                 <h3>Post statistics</h3>
                 <div>
-                    <h4>{myPosts.totalPosts}</h4>
+                    <h4>{totalPosts}</h4>
                     <p>Total Posts</p>
                 </div>
 
                 <div>
-                    <h4>{myPosts.totalComments}</h4>
+                    <h4>{totalComments}</h4>
                     <p>Total Post Comments</p>
                 </div>
 
                 <div>
-                    <h4>{myPosts.totalUpvotes}</h4>
+                    <h4>{totalUpvotes}</h4>
                     <p>Total Post Upvotes</p>
                 </div>
 
                 <div>
-                    <h4>{myPosts.totalBookmarked}</h4>
+                    <h4>{totalBookmarked}</h4>
                     <p>Total Times Bookmarked</p>
                 </div>
 
@@ -58,8 +76,8 @@ function Dashposts() {
                 <h2>All Posts </h2>
 
                 {
-                    Object.keys(myPosts.postById).map(key => {
-                        const post = myPosts.postById[key];
+                    posts.map(post => {
+                        // const post = myPosts.postById[key];
 
                         return <div key={post.id} className='post-card'>
                             <div className='card-creator'>

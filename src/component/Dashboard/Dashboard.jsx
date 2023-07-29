@@ -8,7 +8,7 @@ function Dashboard() {
   const location = useLocation();
   const navigate = useNavigate();
   const def = location.pathname.split('/').slice(-1)[0];
-  console.log(def);
+  // console.log(def);
 
   return (
     <div id='Dashboard'>
