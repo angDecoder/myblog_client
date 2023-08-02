@@ -10,7 +10,6 @@ import Link from '../CustomBlocks/Link';
 function Preview() {
 
   const { draft } = useOutletContext();
-  const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
   console.log(draft);
 
   return (
@@ -18,7 +17,7 @@ function Preview() {
       <div id='post-meta'>
         {
           draft.cover_image === '' ? <></> :
-            <img src={ BACKEND_URL + draft.cover_image} id='post-coverimg' alt="" />
+            <img src={ draft.cover_image} id='post-coverimg' alt="" />
         }
         <h1>{draft.title}</h1>
         {

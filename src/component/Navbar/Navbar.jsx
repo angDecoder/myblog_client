@@ -17,14 +17,10 @@ function Navbar() {
   let {
     status,
     userimg,
-    token_type
   } = useSelector(state => state.user);
 
   const dispatch = useDispatch();
 
-  const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
-  if (token_type === 'JWT' && userimg)
-    userimg = BACKEND_URL + userimg;
 
   const showNav = () => {
     const nav = document.querySelector('nav');

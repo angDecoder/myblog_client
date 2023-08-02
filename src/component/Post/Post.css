@@ -145,7 +145,7 @@
         transform: translateX(-100%);
         
     }
-    #post-control > .upvote{
+    #post-control  .upvote{
         flex-direction: column;
     }
     #post-comment{

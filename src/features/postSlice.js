@@ -1,8 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
+    addCommentApi,
     bookmarkPostApi,
     deletePostApi,
     getAllPostApi,
+    getBookmarkedPostApi,
     getMyPostApi,
     getPostByIdApi,
     getPostCommentApi,
@@ -20,6 +22,13 @@ const initialState = {
         fetched: false,
         loading: false,
         postById: {
+
+        }
+    },
+    bookmarkedPosts : {
+        fetched: false,
+        loading : false,
+        postById : {
 
         }
     }
@@ -58,6 +67,16 @@ export const getPostComment = createAsyncThunk(
 export const getPostById = createAsyncThunk(
     'post/useid',
     getPostByIdApi
+)
+
+export const addComment = createAsyncThunk(
+    'post/add/comment',
+    addCommentApi
+);
+
+export const getBookmarkedPost = createAsyncThunk(
+    'post/get/bookmarked',
+    getBookmarkedPostApi
 )
 
 const postSlice = createSlice({
@@ -112,6 +131,15 @@ const postSlice = createSlice({
                 state.postById[id].bookmarked_by_user = !st;
                 state.postById[id].bookmarked += st ? -1 : 1;
             })
+            .addCase(bookmarkPost.fulfilled,(state,{ payload })=>{
+                const { id } = payload;
+                const st = state.postById[id].bookmarked_by_user;
+                if( !st ){
+                    delete state.bookmarkedPosts.postById[id];
+                }
+                else
+                    state.bookmarkedPosts.postById[id] = { id };
+            })
             .addCase(bookmarkPost.rejected, (state, action) => {
                 const id = action.meta.arg.id;
                 const st = state.postById[id].bookmarked_by_user;
@@ -127,14 +155,19 @@ const postSlice = createSlice({
                 state.loading = false;
             })
             .addCase(getAllPost.fulfilled, (state, { payload }) => {
-                console.log(payload);
+                const { posts,totalPosts } = payload;
+                state.totalPost = totalPosts;
+                state.postFetched += posts.length;
+                posts.forEach(post=>{
+                    state.postById[post.id] = post;
+                });
             })
 
 
             // post comment
             .addCase(getPostComment.fulfilled,(state,{payload})=>{
                 const { id,comments } = payload;
-                console.log(comments,id);
+                // console.log(comments,id);
                 state.postById[id].comments = comments;
             })
 
@@ -143,7 +176,39 @@ const postSlice = createSlice({
             .addCase(getPostById.fulfilled,(state,{payload})=>{
                 const { post,comment } = payload;
                 state.postById[post.id] = post;
-                state.postById[post.id].comment = comment;
+                state.postById[post.id].comments = comment;
+            })
+
+
+            // add comment 
+            .addCase(addComment.fulfilled,(state,{ payload })=>{
+                const { id,email,comment } = payload;
+                if( !state.postById[id]?.comments )
+                    state.postById[id].comments = [];
+
+                state.postById[id].comments.push({
+                    id : Math.random(),
+                    post_id : id,
+                    account_id : email,
+                    comment
+                })
+            })
+
+            // get bookmarked posts
+            .addCase(getBookmarkedPost.pending,(state)=>{
+                state.bookmarkedPosts.loading = true;
+            })
+            .addCase(getBookmarkedPost.rejected,(state)=>{
+                state.bookmarkedPosts.loading = false;
+            })
+            .addCase(getBookmarkedPost.fulfilled,(state,{ payload })=>{
+                state.bookmarkedPosts.loading = false;
+                state.bookmarkedPosts.fetched = true;
+                const { posts } = payload;
+                posts.forEach(post=>{
+                    state.bookmarkedPosts.postById[post.id] = { id : post.id };
+                    state.postById[post.id] = post;
+                })
             })
     }
 });

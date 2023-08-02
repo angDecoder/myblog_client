@@ -28,13 +28,12 @@ export const getPostCommentApi = async ({ id }, thunkApi) => {
     }
 }
 
-export const addCommentApi = async ({ id, email, comment, ax }) => {
+export const addCommentApi = async ({ id, email, comment, ax },thunkApi) => {
     const t = toast.loading('Posting comment .... ');
 
     try {
         await ax.post('post/comment', {
             id,
-            email,
             comment
         });
         toast.update(t, {
@@ -44,6 +43,8 @@ export const addCommentApi = async ({ id, email, comment, ax }) => {
             isLoading: false,
             closeOnClick: true
         });
+
+        return { id,email,comment };
     } catch (error) {
         const message = error?.response?.data?.message || "some error occured";
         toast.update(t, {
@@ -113,7 +114,12 @@ export const deletePostApi = async ({ ax, id }, thunkApi) => {
     }
 };
 
-export const upvotePostApi = async ({ ax, id }, thunkApi) => {
+export const upvotePostApi = async ({ ax, id,loggedIn }, thunkApi) => {
+
+    if( !loggedIn ){
+        toast('Login to upvote');
+        return;
+    }
     try {
         const res = await ax.put('post/upvote/' + id);
         return res.data;
@@ -131,10 +137,16 @@ export const upvotePostApi = async ({ ax, id }, thunkApi) => {
     }
 };
 
-export const bookmarkPostApi = async ({ ax, id }, thunkApi) => {
+export const bookmarkPostApi = async ({ ax, id,loggedIn }, thunkApi) => {
+
+    if( !loggedIn ){
+        toast('login to bookmark');
+        return;
+    }
     try {
         const res = await ax.put('post/bookmark/' + id);
-        return res.data;
+
+        return { id };
 
     } catch (error) {
         const message = error?.response?.data?.message || "some error occured";
@@ -157,4 +169,34 @@ export const getAllPostApi = async ({ email, offset }, thunkApi) => {
         const message = error?.response?.data?.message || "some error occured";
         return thunkApi.rejectWithValue({ message });
     }
-}
+};
+
+export const getBookmarkedPostApi = async({ ax },thunkApi)=>{
+    const t = toast.loading('Fetching bookmarks.... ');
+
+    try {
+        const res = await ax.get('post/bookmark');
+        toast.update(t, {
+            render: 'bookmarks fetched',
+            type: 'success',
+            autoClose: true,
+            isLoading: false,
+            closeOnClick: true
+        });
+
+        return res.data;
+    } catch (error) {
+        const message = error?.response?.data?.message || "some error occured";
+        toast.update(t, {
+            render: message,
+            type: 'error',
+            autoClose: true,
+            isLoading: false,
+            closeOnClick: true
+        });
+        return thunkApi.rejectWithValue({ 
+            message,
+            error
+        });
+    }
+};

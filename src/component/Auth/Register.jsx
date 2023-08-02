@@ -3,15 +3,15 @@ import { useNavigate } from 'react-router-dom'
 import './Auth.css';
 import { NavLink } from 'react-router-dom';
 import Adduser from '../../assets/adduser.svg';
-import { registerUserJwtApi } from '../../api/auth';
-import axios from 'axios';
+import { registerUserJwtApi, uploadImageApi } from '../../api/auth';
+import Loading from '../../assets/Loading';
+// import axios from 'axios';
+// import { toast } from 'react-toastify';
 // import { useDispatch } from 'react-redux';
 // import { registerUserJwt } from '../../api/auth';
 
 
 function Register() {
-  const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
-  // console.log(import.meta.env);
 
   const [avatar, setAvatar] = useState(Adduser);
   const navigate = useNavigate();
@@ -19,21 +19,23 @@ function Register() {
   const usernameRef = useRef();
   const passwordRef = useRef();
   const confirmPassRef = useRef();
+  const [formLoading, setFormLoading] = useState(false);
 
-  // console.log(import.meta.env);
+  const uploadImage = async (event) => {
+    const image = event.target.files[0];
+    try {
+      setAvatar('LOADING');
+      setFormLoading(true);
 
-  const selectImage = (event) => {
-    const file = event.target.files[0];
+      const image_url = await uploadImageApi(image);
 
-    if (file) {
-      const reader = new FileReader();
+      setAvatar(image_url);
+      setFormLoading(false);
 
-      reader.onload = (event) => {
-        const base64Data = event.target.result;
-        setAvatar(base64Data);
-      };
-
-      reader.readAsDataURL(file);
+    } catch (error) {
+      setFormLoading(false);
+      setAvatar(Adduser);
+      console.log('error catched');
     }
   }
 
@@ -50,7 +52,7 @@ function Register() {
     const email = emailRef.current.value.trim();
     const password = passwordRef.current.value.trim();
     const username = usernameRef.current.value.trim();
-    await registerUserJwtApi({ email, password, username,avatar, navigate });
+    await registerUserJwtApi({ email, password, username, avatar, navigate });
 
   }
 
@@ -129,6 +131,7 @@ function Register() {
             ref={passwordRef} type="password" placeholder='Password' />
 
         </span>
+
         <span className="form-input">
           <input
             onKeyUp={(e) => keyUpHandler(e, cnfPasswordTest(), '* password did not match')}
@@ -137,16 +140,26 @@ function Register() {
         </span>
 
         <input type="file" accept="image/*"
-          onChange={selectImage}
+          onChange={uploadImage}
           style={{ display: 'none' }} id='form-file' placeholder='my' />
+
         <label htmlFor="form-file" id='select_img'>
-          <img src={avatar} alt="" />
+          {
+            avatar === 'LOADING' ?
+              <Loading /> :
+              <img src={avatar} alt="" />
+
+          }
           <span style={{ fontSize: 'var(--p)' }}>Profile Pic</span>
         </label>
 
         <div>
-          <button className='form-btn' data-btn='green' onClick={onSubmitHandler}>Submit</button>
-          <button className='form-btn' data-btn='red' onClick={onClearHandler}>Clear</button>
+          <button className='form-btn'
+            disabled={formLoading} data-btn='green'
+            onClick={onSubmitHandler}>Submit</button>
+          <button className='form-btn'
+            disabled={formLoading} data-btn='red'
+            onClick={onClearHandler}>Clear</button>
         </div>
       </form>
 

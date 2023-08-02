@@ -26,7 +26,7 @@ export const createDraftApi = async ({ ax, draft, navigate }, thunkApi) => {
             closeOnClick: true
         });
 
-        console.log(res.data);
+        // console.log(res.data);
         let to = '/editor/edit/' + res.data.id;
         navigate(to);
         return { ...res.data, draft };
@@ -43,10 +43,10 @@ export const createDraftApi = async ({ ax, draft, navigate }, thunkApi) => {
     }
 }
 
-export const updateDraftApi = async ({ ax, draft }, thunkApi) => {
+export const updateDraftApi = async ({ ax, draft,setChanges }, thunkApi) => {
     const t = toast.loading('Updating Draft ... ');
 
-    console.log(draft);
+    // console.log(draft);
     try {
         const res = await ax.put('draft/' + draft.id, {
             draft
@@ -59,7 +59,7 @@ export const updateDraftApi = async ({ ax, draft }, thunkApi) => {
             isLoading: false,
             closeOnClick: true
         });
-
+        setChanges({});
         return { draft };
 
     } catch (error) {

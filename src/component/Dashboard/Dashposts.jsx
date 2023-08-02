@@ -29,7 +29,6 @@ function Dashposts() {
 
     const ax = usePrivateAxios();
     const navigate = useNavigate();
-    const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
 
     useEffect(() => {
         if (!myPosts.fetched)
@@ -86,7 +85,7 @@ function Dashposts() {
                             </div>
                             {
                                 post.cover_image==='' ? <></>:
-                                <img src={BACKEND_URL + post.cover_image} alt="" />
+                                <img src={post.cover_image} alt="" />
 
                             }
                             <div className='card-content'>

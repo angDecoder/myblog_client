@@ -60,7 +60,7 @@ function Dashdrafts() {
                             </div>
                             {
                                 !elem.cover_image ? <></> :
-                                <img src={BACKEND_URL+elem.cover_image} alt="" />
+                                <img src={elem.cover_image} alt="" />
                             }
                             <div className='card-content'>
                                 <h4>{elem.title}</h4>

@@ -131,9 +131,23 @@ button[data-btn='blue'] {
 
 .svg-img.checked {
   stroke: var(--stroke-hover);
-  fill : var(--stroke_bg-hover);
-  background-color : var(--stroke_bg-hover);
-  
+  fill: var(--stroke_bg-hover);
+  background-color: var(--stroke_bg-hover);
+
+}
+
+.spin-loading{
+  animation: loading 1s ease-in-out 0ms infinite forwards;
+}
+
+@keyframes loading {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @media screen and (min-width: 480px) {

@@ -15,6 +15,8 @@ import Note from '../../assets/Write';
 import Tip from '../../assets/Logo';
 import Warning from '../../assets/Danger';
 import VerticalDot from '../../assets/VerticalDot';
+import { uploadImageApi } from '../../api/auth';
+import Loading from '../../assets/Loading';
 
 
 function Editor() {
@@ -23,10 +25,8 @@ function Editor() {
   const editorControlRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const contentRef = useRef();
-  const { draft, setDraft, changes,setChanges } = useOutletContext();
-  // console.log(draft.cover_image);
+  const { draft, setDraft, changes, setChanges } = useOutletContext();
 
-  // adding event listener
   useEffect(() => {
 
     const selector = `#editor_title > textarea,
@@ -65,28 +65,38 @@ function Editor() {
   var addTags = (event) => {
     if (event.key === 'Enter') {
       let text = event.target.value.trim().toLowerCase();
-      if (text !== '' && !draft.tags.includes(text) && draft.tags.length < 4)
+      if (text !== '' && !draft.tags.includes(text) && draft.tags.length < 4){
         editCurrentDraft([...draft.tags, text], 'tags');
-
+        setChanges({
+          ...changes,
+          tags : true,
+        });
+      }
+      
       else
         event.target.placeholder = 'No more tags';
 
-      event.target.value = '';
+        event.target.value = '';
     }
   }
-
+  
   var removeTag = (tag) => {
     const newTagList = draft.tags.filter(elem => elem !== tag);
     editCurrentDraft(newTagList, 'tags');
     const input = document.querySelector('#editor_title > input');
     input.placeholder = 'Add upto 4 tags ...';
+    setChanges({
+      ...changes,
+      tags : true,
+    });
+
   }
 
   const editCurrentDraft = (value, property) => {
     let newDraft = { ...draft };
     newDraft[property] = value;
     setDraft(newDraft);
-    const newChanges = {...changes };
+    const newChanges = { ...changes };
     newChanges[property] = true;
     setChanges(newChanges);
   }
@@ -96,23 +106,40 @@ function Editor() {
     setDraft({ ...draft, content: contentRef.current.value });
   }
 
-  const selectCoverImage = (event) => {
-    const file = event.target.files[0];
+  const selectCoverImage = async (event) => {
+    const image = event.target.files[0];
 
-    if (file) {
-      const reader = new FileReader();
+    try {
+      setDraft({
+        ...draft,
+        cover_image: 'LOADING',
+        loading : true,
+      });
 
-      reader.onload = (event) => {
-        const base64Data = event.target.result;
-        setDraft({ ...draft, cover_image: base64Data });
-      };
+      const image_url = await uploadImageApi(image);
 
-      reader.readAsDataURL(file);
+      setDraft({
+        ...draft,
+        cover_image: image_url,
+        loading : false,
+      });
+
+      setChanges({
+        ...changes,
+        cover_image : true,
+      })
+
+    } catch (error) {
+      setDraft({
+        ...draft,
+        cover_image : '',
+        loading : false,
+      });
     }
   }
 
-  const removeCoverImg = ()=>{
-    setDraft({ ...draft,cover_image : '' });
+  const removeCoverImg = () => {
+    setDraft({ ...draft, cover_image: '' });
     document.querySelector('#select_coverimg').value = '';
   }
 
@@ -125,8 +152,11 @@ function Editor() {
             <label htmlFor="select_coverimg">Add Cover Image</label>
           </button>
           {
-            draft.cover_image === '' ? <></> :
-              <img onClick={removeCoverImg} src={draft.cover_image} alt="" />
+            draft.cover_image === '' ?
+              <></> :
+              draft.cover_image === 'LOADING' ?
+                <Loading /> :
+                <img onClick={removeCoverImg} src={draft.cover_image} alt="" />
           }
         </div>
         <input accept='image/*'

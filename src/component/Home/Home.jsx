@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './Home.css';
 import Logo from '../../assets/Logo'
 import scene from '../../assets/user.png';
@@ -6,31 +6,42 @@ import Upvote from '../../assets/Upvote';
 import Bookmark from '../../assets/Bookmark';
 import Share from '../../assets/Share';
 import { useSelector, useDispatch } from 'react-redux';
-import { bookmarkPost, upvotePost } from '../../features/postSlice';
+import { bookmarkPost, getAllPost, upvotePost } from '../../features/postSlice';
 import usePrivateAxios from '../../hooks/usePrivateAxios';
 import { USER_STATUS } from '../../features/userSlice';
 import { toast } from 'react-toastify';
 
 function Home() {
 
-  const postById = useSelector(state => state.post.postById);
-  const userStatus = useSelector(state=>state.user.status);
+  const { postById, totalPost, postFetched, loading } = useSelector(state => state.post);
+  const { status, email } = useSelector(state => state.user);
   const ax = usePrivateAxios();
   const dispatch = useDispatch();
-  console.log(postById);
 
-  const upvoteThePost = (event,id) => {
-    if( userStatus===USER_STATUS.loggedin )
-      dispatch( upvotePost({ax,id}) );
-    else
-      toast("Login before upvoting");
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  const fetchPosts = () => {
+    if (totalPost != postFetched || (totalPost === 0 && postFetched === 0))
+      dispatch(getAllPost({ email, offset: postFetched }));
   }
 
-  const bookmarkThePost = (event,id) => {
-    if( userStatus===USER_STATUS.loggedin )
-      dispatch( bookmarkPost({ax,id}) );
-    else
-      toast("Login before upvoting");
+  const upvoteThePost = (id) => {
+    dispatch(upvotePost({
+      ax,
+      id,
+      loggedIn: status === USER_STATUS.loggedin
+    }));
+  }
+
+  const bookmarkThePost = (id) => {
+    dispatch(bookmarkPost({
+      ax,
+      id,
+      loggedIn: status === USER_STATUS.loggedin
+    }));
   }
 
 
@@ -45,8 +56,18 @@ function Home() {
       </section>
 
       <section className='post-list'>
-        <h2>Top Posts</h2>
-
+        <h2>All Posts</h2>
+        <div className='post-card'>
+          <div className='card-creator'>
+            <p> Angshu </p>
+            <span>Read</span>
+          </div>
+          <img src={scene} alt="" />
+          <div className='card-content'>
+            <h4> Default Post </h4>
+            <p>description : Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto aut, autem rerum esse illum nihil, veniam dicta ad</p>
+          </div>
+        </div>
         {
           Object.keys(postById).map(key => {
             const post = postById[key];
@@ -56,17 +77,17 @@ function Home() {
                   <p> {post.created_by.split('@')[0]} </p>
                   <span>Read</span>
                 </div>
-                <img src={scene} alt="" />
+                <img src={post.cover_image} alt="" />
                 <div className='card-content'>
                   <h4> {post.title} </h4>
                   <p>description : {post.description} </p>
                 </div>
                 <div className='card-bar'>
-                  <span onClick={(event)=>upvoteThePost(event,post.id)}>
-                    <Upvote myclass={post.upvoted_by_user?'checked' : ''} votes={post.total_upvote} />
+                  <span onClick={(event) => upvoteThePost(post.id)}>
+                    <Upvote myclass={post.upvoted_by_user ? 'checked' : ''} votes={post.total_upvote} />
                   </span>
-                  <span onClick={(event)=>bookmarkThePost(event,post.id)}>
-                    <Bookmark myclass={post.bookmarked_by_user?'checked' : ""} />
+                  <span onClick={(event) => bookmarkThePost(post.id)}>
+                    <Bookmark myclass={post.bookmarked_by_user ? 'checked' : ""} />
                   </span>
                   <span>
                     <Share />

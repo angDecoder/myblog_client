@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { createDraft, editDraft, updateDraft,publishDraft, addToEdit } from '../../features/draftSlice';
+import { createDraft, editDraft, updateDraft, publishDraft, addToEdit } from '../../features/draftSlice';
 import usePrivateAxios from '../../hooks/usePrivateAxios';
 import { toast } from 'react-toastify';
 import './TextEditor.css';
@@ -13,10 +13,10 @@ function TextEditor() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
-  console.log(id);
   let origDraft = useSelector(state => state.draft.edit[id]);
+  // console.log(id, origDraft.id);
   const [draft, setDraft] = useState(
-    JSON.parse(JSON.stringify(origDraft))
+    JSON.parse(JSON.stringify({ ...origDraft, loading: false }))
   );
   const [changes, setChanges] = useState({})
 
@@ -26,6 +26,12 @@ function TextEditor() {
       dispatch(editDraft({ draft }));
     }
   }, []);
+
+  useEffect(() => {
+    setDraft(
+      JSON.parse(JSON.stringify({ ...origDraft, loading: false }))
+    )
+  }, [origDraft])
 
 
   const toggleNavlink = () => {
@@ -37,39 +43,46 @@ function TextEditor() {
 
   const saveDraft = () => {
 
-    dispatch( addToEdit({id}) );
-    dispatch( editDraft({ draft }) );
+    dispatch(addToEdit({ id }));
+    dispatch(editDraft({ draft }));
 
     if (id === 'noid') {
-      const { id, type, ...editedDraft } = draft;
+      const { id, type, loading, ...editedDraft } = draft;
       dispatch(createDraft({ ax, draft: editedDraft, navigate }));
     }
     else {
       const editedDraft = {};
       // console.log(changes,draft);
-      Object.keys(changes).forEach(key=>{
-        if( changes[key] )
+      Object.keys(changes).forEach(key => {
+        if (changes[key] && key !== 'loading')
           editedDraft[key] = draft[key];
       })
 
       editedDraft.id = draft.id;
+      // console.log(editedDraft, draft);
 
-      dispatch( updateDraft({ax,draft : editedDraft}) );
+      dispatch(updateDraft({ ax, draft: editedDraft,setChanges }));
     }
 
   }
 
-  const publishTheDraft = ()=>{
-      dispatch( publishDraft({ ax,id,navigate }) );
+  const publishTheDraft = () => {
+    if( Object.keys(changes).length===0 )
+      dispatch(publishDraft({ ax, id, navigate }));
+    else 
+      toast('save changes before publishing');
   }
 
   return (
     <div id='TextEditor'>
       <div id='edit_toggle'>
-        <button onClick={saveDraft}>{id === 'noid' ? 'Create Draft' : 'Save Changes'}</button>
+        <button
+          disabled={draft.loading}
+          onClick={saveDraft}>{id === 'noid' ? 'Create Draft' : 'Save Changes'}</button>
         {
           id !== 'noid' ?
-            <button onClick={publishTheDraft} data-btn='blue'>Publish</button> :
+            <button disabled={draft.loading}
+              onClick={publishTheDraft} data-btn='blue'>Publish</button> :
             <></>
         }
 
@@ -78,7 +91,7 @@ function TextEditor() {
         }</NavLink>
       </div>
 
-      <Outlet context={{ draft, setDraft, changes,setChanges }} />
+      <Outlet context={{ draft, setDraft, changes, setChanges }} />
 
     </div>
   )

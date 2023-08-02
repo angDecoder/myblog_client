@@ -28,7 +28,7 @@ function Layout() {
     <>
     <ToastContainer />
       {
-        !tried.current || status === USER_STATUS.loading ?
+        status === USER_STATUS.loading ?
           <div>Loading ...</div> :
           <>
             <Navbar />
