@@ -5,6 +5,7 @@ import scene from '../../assets/user.png';
 import Upvote from '../../assets/Upvote';
 import Bookmark from '../../assets/Bookmark';
 import Share from '../../assets/Share';
+import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { bookmarkPost, getAllPost, upvotePost } from '../../features/postSlice';
 import usePrivateAxios from '../../hooks/usePrivateAxios';
@@ -16,6 +17,7 @@ function Home() {
   const { postById, totalPost, postFetched, loading } = useSelector(state => state.post);
   const { status, email } = useSelector(state => state.user);
   const ax = usePrivateAxios();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
 
