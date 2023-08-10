@@ -75,7 +75,7 @@ function Home() {
               <div key={post.id} className='post-card'>
                 <div className='card-creator'>
                   <p> {post.created_by.split('@')[0]} </p>
-                  <span>Read</span>
+                  <span onClick={()=>navigate('/post/'+post.id)} >Read</span>
                 </div>
                 <img src={post.cover_image} alt="" />
                 <div className='card-content'>
